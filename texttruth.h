@@ -10,9 +10,12 @@
 typedef vector<float> Keyword;
 typedef vector<Keyword >  Answer;
 typedef vector<int> AnswerLabel;
+typedef vector<int> TruthLabel;
 
 typedef vector<float> Cluster;
+typedef vector<vector<Answer >> Dataset;
+typedef uint[4] PriorCount;
 
 vector <AnswerLabel> sphere_kmeans(vector <Answer> &answers, int cluster_number, int max_iter = 300, float tol = 1e-4);
-void texttruth(float ***all_data, int question_num, int dimension, int user_num, int k);
 #endif //ANONYMOUS_PAYMENT_TEXTTRUTH_H
+void texttruth(Dataset &dataset);

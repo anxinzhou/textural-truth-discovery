@@ -5,60 +5,43 @@
 #include "texttruth.h"
 
 
-void texttruth(float ***all_data, int question_num, int dimension, int user_num, int k) {
-    // init variable
-    float **cluster = new float *[k];
-    for (int i = 0; i < k; i++) {
-        cluster[i] = new float[dimension]();
-    }
-    int *cluster_label = new int[user_num];
-
-
-    int ***user_truth_label = new int **[question_num];
-    for (int i = 0; i < question_num; i++) {
-        user_truth_label[i] = new int *[user_num];
-        for (int j = 0; i < user_num; ++i) {
-            ser_truth_label[i][j] = new int[k]();
-        }
-    }
-
-    int **count =
-
-
-            int * *question_truth_label = new int *[question_num];
-    for (int i = 0; i < k; ++i) {
-        question_truth_label[i] = new int[k];
-    }
-
-    // begin texttruth
-    for (int i = 0; i < question_num; ++i) {
-        sphere_kmeans(all_data[i], dimension, user_num, k, cluster, cluster_label);
-        for (int j = 0; j < user_num; j++) {
-            user_truth_label[i][j][(cluster_label[j]] = 1;
-        }
-    }
-
-
-
-    // free memory
-
+void texttruth(Dataset &dataset) {
+    int cluster_number = 10;
+    int question_num = dataset.size();
+    int user_num = dataset[0].size();
+    vector <vector<TruthLabel >> all_truth_label(question_num);
+    vector <vector<PriorCount >> all_prior_count(question_num);
 
     for (int i = 0; i < question_num; i++) {
-        delete user_truth_label[i];
-        for (int j = 0; i < user_num; ++i) {
-            delete ser_truth_label[i][j];
+        vector <Answer> &answers = dataset[i];
+        vector <AnswerLabel> user_answer_label = sphere_kmeans(answers, cluster_number);
+        vector <TruthLabel> user_truth_label(user_num);
+        for (int j = 0; j < user_num; ++j) {
+            AnswerLabel &answer_label = user_answer_label[j];
+            int key_word_length = answer_label.size();
+            TruthLabel truth_label(cluster_num);
+            for (int k = 0; k < key_word_length; ++k) {
+                int label = answer_label[k];
+                truth_label[label] = 1;
+            }
+            user_truth_label.append(truth_label);
         }
+        all_truth_label.append(user_truth_label);
     }
 
-    for (int i = 0; i < k; i++) {
-        delete cluster[i];
-        delete question_truth_label[i];
-    }
 
-    delete[]cluster;
-    delete[]cluster_label;
-    delete[]user_truth_label;
-    delete[]question_truth_label;
+}
+
+int *GetPriorPointer(uint[4] prior_count, bool is_true, bool is_positive) {
+    if (!is_true && is_positive) {
+        return &prior_count[2];
+    } else if (is_true && !is_positive) {
+        return &prior_count[0];
+    } else if (is_true && is_positive) {
+        return &prior_count[3];
+    } else {
+        return &prior_count[1];
+    }
 }
 
 float similarity(vector<float> &a, vector<float> &b) {
