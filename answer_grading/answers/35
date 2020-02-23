@@ -1,0 +1,26 @@
+The array itself can be signed to a pointer or each element of the array can be assigned to a pointer.
+An array can be addressed in pointer/offset notation by setting a pointer variable equal to the variable name of the array. Elements of the array can then be accessed by adding an offset value to the pointer variable.
+Element b[ n ] can be accessed by *( bPtr + n ).
+Using either the name of the array as a pointer or using a separate pointer that points to the array.
+An element b[3] can be referenced by using *( bPtr + 3) instead.
+you get the memory location of the first element and the you add an offset to it to get other elements.
+yes *(array +offset)
+The name of an array is considered to be a pointer in C++, and can be passed as such in functions parameters. Declaring int a[10]; creates a pointer "a" which stores the address of a[0].
+Element b[ n ] can be accessed by *( bPtr + n ) is an example of how an array can be addressed as pointer/offset notation.<br>
+*(array + element)
+*f[3]
+you can have a pointer to the front of the array and add to the memory location (or offset from the initial value).
+The pointer to the array will initially point to the first element of that array. When the pointer is incremented, it will point to the next element, and so on.
+With<br>int x[10];<br>int *xPtr;<br>xPtr = x;<br>Address &x[1] is the same as xPtr + 1.
+Takes the number of array elements and points to each at a time
+The array can act as a pointer or be referenced by a pointer.<br><br>*(arrayPtr + 3) or *(array + 3)
+by using the *(pointer + element-index)
+using the star operator. <br><br>array: b[n] can be accessed by *(bpointer +n)
+Element A[n] can be accessed by *(APtr + n)
+by referencing a pointer and referring to other pointers relative to the first pointer(pointer+1, pointer +2, etc)
+First, some pointer variable must reference the first entity in the array. Any variable in the array can then be accessed by referring to that first entity's address plus some offset. i.e.<br>ptrToArray = array; nthEntity = *(ptrToArray + n);
+&[b3] is as bptr + 3.<br>Array can be treated as pointer
+a[i] = *(a+i)
+&b[3]<br><br>bPtr + 3
+*(arrayName + index)
+multi-dimensional array

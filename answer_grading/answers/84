@@ -1,0 +1,28 @@
+push and pop
+Pop, which removes the head, or least recently inserted node from the stack. Push, which inserts a new node at the head of the stack.
+Push and pop
+The Push function and the Pop function.
+push and pop
+push - puts an element on the stack<br>pop- takes an element off the stack
+Push and pop.
+Push and Pop
+push and pop.
+Push and Pop. Push adds an element to the stack, while Pop removes the top element from a stack.
+pop and push
+push,pop,search,isEmpty
+push and pop
+Push, Pop, isEmpty, isFull<br><br>Maybe List to show all elements or an operation to count how many elements in the stack.
+pop, push
+isempty, push and pop, along with usually,
+push and pop
+push and pop. push puts objects into the stack and pop takes them out following the first in last out rule.
+The main operations in a stack are push and pop. Push adds an item to the top of the stack, pop removes the top item from the stack.
+push and pop
+push, which adds an item to the top of the stack, and<br>pop, which takes the first item off the top to the stack
+the main functions defined for a stack are push, which puts an element on the top of the stack, and pop, which removes an item from the top.
+Push()<br>Pop()<br>Full()<br>IsEmpty()
+pop and push<br>to remove an element and to insert an element
+Push, Pop
+push and pop
+push - Add an element to the top of the stack<br>pop - remove the top element from the stack
+push and pop

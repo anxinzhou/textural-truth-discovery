@@ -1,0 +1,26 @@
+They are passed by reference because you want the function to change the pointer<br>
+In a circular linked list, every node has a successor which means that the last node's successor is the head or first node.
+A circular linked list is a linked list that links items in a continuous circle. This allows the full list to be traversed by starting at any item in the list; a fixed head or tail is not required.
+In a circular linked list, the last node points to the first node.
+On a circular linked list, the end element points to the head, thus making the circle. A basic link list has nothing pointing to the head, and the last element points to null.
+the circular linked list's last node points to the begining of the list while a standard linked list points to NULL
+The last item in the list points to the head
+In a circular linked list, the last node points back to the first node, there is no NULL
+Circular linked lists are most useful for describing naturally circular structures, and have the advantage of regular structure and being able to traverse the list starting at any point.
+A circular linked list has the last node point back to the head of the linked list.
+Basic linked list points to a NULL at the end and circular points to the head at the end.
+in a circular linked list the the last item points to the first item.
+The circular linked list's tail points to the head, whereas the basic linked list's tail points to a NULL.
+a basic linked list has an end with a null value where a circular linked list has a pointer from the end to the beginning
+how to determine the end of the list, in basic linked lists the last element links to a null pointer, while circular linked lists link to the head element at the end.
+No Node in a circular linked list contains NULL, the last Node points pack to a Node within the list.
+The difference between a circular linked list and a basic linked list is that a circular linked list, the last node references the first node. Every node in a circular linked list has a successor and no node in a circular linked list contains NULL.
+No node in a circular linked list contains NULL.
+in a circular linked list the last element points to the head of the list
+In a regular linked list the last object points to NULL. In a circular linked list, the last object points back to the beginning of the list
+In circular linked list each node has successor, no node contains NULL, while in basic linked list last node contain NULL.
+in a circular linked lists, the last element points to the first
+A circular linked list does not have a last element. Instead, it's last item points to the head of the list.
+in a circular linked list, the last node contains a pointer that goes back to the first node; in a basic linked list, the last node contains a null pointer<br>
+in a circular linked list, the last object is linked back to the first object.
+In the case of a non circular link list, if you are at the last node of the list and u want to move to first u need to go to one, step back till u reach to first. But in circular link list from last to first you need to make only one move. <br>In a single link list u can move only in one direction but in double link list u can move in any direction back or forward or forward.<br><br>

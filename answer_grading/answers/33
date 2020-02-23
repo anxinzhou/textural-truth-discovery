@@ -1,0 +1,26 @@
+This operator returns the memory address of its operand.
+The address operator returns the memory address of its operand.
+Returns memory address of its operand.
+The address (&) operator returns the memory address of its operand.
+Returns the memory address of its operand.
+returns the place in memory of that element
+The address of the where the data is stored:<br>&b will return the address of b.
+The & operator returns the address of a variable
+the ampersand (&) means "pass by reference". When the function is called, a pointer to the variable, instead of the variable itself, will be passed into the function.
+& returns the memory address of its operand.
+the address of the variable in memory
+Returns the address location in memory of the item.
+The address operator returns the memory address of its operand.
+The & operator returns the memory address of the variable it precedes.
+The memory address of operand, 0x000000 or something along those lines.
+The object's memory address.
+the reference to a variable
+returns the memory address of its operand
+memory address of its operand
+returns the address number of the specified variable
+It returns the memory address of it's operand. That is, if applied to a normal variable, it gives the variable's memory address, just as a pointer variable might.
+The & is a unary operator that returns the memory address of its operand
+the address of the variable it is attached to
+the memory address of its operand
+returns the address of what it is put in front of
+returns a pointer

@@ -1,0 +1,30 @@
+the role of a header file list all the functions a class can do while hiding the inner workings of its functions<br>
+The main role of header file is it is used to share information among various files.
+Header files separate files in which classes are defined and allow the compiler to recognize classes when used elsewhere.
+No
+A header file consists of "reusable" source code such as a class in a file that by convention has a .h filename extension. This differs from .cpp files that contain "source-code."
+To provide information about the contents of a library. It includes the definition of classes, declarations of functions, data types, and constants.
+the header file shows the user what types go into and come out of a function but does not allow a user to manipulate the actual code for the function.
+Header files declares the class member functions.
+A header file allows for the separation of declaration and implementation into separate files.
+the header file has access to the C++ Standard Library and makes certain classes like class string work.
+â€œInstructâ€ the compiler on how to interface with library and user-written components.
+create a comon area to contain reusable functions.
+to declare the functions being used in the classes
+#include "hat.h" allows the use of the hat container, so called from the act of pulling names from a hat. The header file for hat includes functions for storage and retrieval of it's contents, mainly put(), peek(), and pull().
+To hold reusable content or modules separate from the actual source-code file that can be easily referenced and employed for different programs.
+a header file is a file used to store a list of prototye functions and data members.
+A header file is a cross communication method between source files, to help limit the size of each individual program. Without header files a program will be 1 large lump of code and thus fairly hard to debug and traverse.
+It contains reusable source code for use by other classes.
+to separate the source code from the main function, allows the methods/classes to be included in the program without direct coding. allows re usability.
+Header files have reusable source code in a file that a programer can use.
+To hide the definition and details of a class. Also to help readability of the main C++ file.
+To allow the compiler to recognize the classes when used elsewhere.
+A header file declares a class, its data, and functions available through that class.
+header files contain code which can be used in multiple files
+Allow compiler to recognize the classes when used elsewhere
+Allow compiler to recognize the classes when used elsewhere<br>
+To promote function reusuablitly
+class definitions are placed here
+A header file usually contains class and/or function prototypes.
+contains all the standard C++ library's i.e. string

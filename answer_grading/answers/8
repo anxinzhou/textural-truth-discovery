@@ -1,0 +1,30 @@
+Data members are the data components of a particular class. A member function are the functioning components of the class.
+A field variable is a variable that is declared as a member of a class. A local variable is avariable that isdeclared local to a method.
+Data members are declared inside the class, but outside of any member functions. Unlike with local variables, each object of the class keeps its own copy of the data members stored in memory.
+Data member are variables that represent an attribute in a class definition. Local variables declared in a function body cannot be used outside of that function body. When a function terminates the values of its local variables are lost.
+A local variable cannot be accessed outside the function in which it is declared. Data members normally are private. Variables of functions declared private are accessible only to member functions of the class in which they are declared.
+A data member is part of a C++ class or structure that stores data of a certain type... A local variable inside a member function is only available inside that function, and can be used to derive a desired outcome.
+A local variable can only be accessed within the scope of its declaration.
+Data members are the atributes of the function and can be used outside the function.<br>Local variable can not be used outside the function and the value is lost after the function terminates.
+data members are permanent attributes of the class, local variables inside a member function are lost when the scope of the member function ends.
+data members are declared in a class definition but outside the bodies of a class's member-function definitions. Local variables are declared in a function definition's body
+A data member is globally accessible, while a local variable is only accessible inside the member function.
+A variable inside a member function can only be accessed inside that member and a data member can be accessed throughought the program.
+Local variables are used only within the scope of its declaration
+A data member is a more general term describing all objects instantiated within a member function. "Local" in local variables refers more to the scope of a variable, which may be located in anything from a control structure to a class. Local variables whose scope are in a member function are the same as data members of member functions.
+A data member exists permanently in that program's memory as long as it's run.<br><br>A local variable inside a member function is temporal and only used to operate in the function and exists as long as the function is run.
+local variables can only be used within the function, where as data members can be set to public access and can be used throughout
+The local variable is lost once it exits the block of code, while the data member is not.
+Every member function can access and modify a data member.<br>A local variable can only be used from the line of declaration to the next closing } before it is lost from memory.
+data member is accessible to all functions in the class, where local variable is only available to the member function and value is lost when function closes
+Data members are variables that are declared inside the class definition but outside of the bodies of the class member functions. Local variables can only be used within the function declaration.
+The data member can be accessed outside of the class, whereas the local variable cannot.
+Local variables cannot be used outside of that function body. When a function terminates the values of its local variables are lost. Where as data members are variables in a class definition, and they exist throughout the life of the object.<br>
+a local variable in a member function has to be static. a data member can change its value freely.
+a local variable is only useable within the function it is defined, whereas a data member is available to any method within its class
+Variable declared in a function defination's body cannot be used outside of that function.<br><br>Data members accessible only to member function of that class.
+data members <br><br>local variables are declared in a function definitionâ€™s body.<br>they Cannot be used outside of that function body.<br>When a function terminates, the values of its local variables are lost.<br><br><br>
+local variable is only available in the function.
+local variables are accessed inside member functions only while data members <br><br>can be accessed throughout the class
+A data member is accessible anywhere in the class, while i local variable in a member function is only accessible in that particular function, and is freed after the function exits.
+a Data member is encapsulated within a class or object, it is static and can be shared by all instances of that class. <br>however local variable's are only used from the function or block in which it is declared and not the whole class. other wise they would be called global variables.

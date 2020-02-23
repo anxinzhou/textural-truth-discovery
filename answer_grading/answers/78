@@ -1,0 +1,28 @@
+Log(n) where n is the number of nodes.
+log(n) steps
+The number of levels and the height of the tree
+It is the same as the height of the tree.
+Given n elements, it would take n/2 steps to find the search criteria.
+log n
+Depends on the location of the node you are looking for. If it is the root it is one step. <br>else<br>If it is smaller than the current you are on node you go to the left. If it is larger than the current node you are on go to the right.
+2^n where n is the # of levels the binary tree has
+The number of steps to search a node is the function n-1.
+It would take n/2 elements, given n.
+log(n)
+O(log n)
+O( Log (n) )
+If the binary search tree is constructed efficiently, best case scenario is O(log n) time. Where n is the number of items in the tree.<br><br>If the binary search tree is constructed poorly, with for instance the root of the tree being 1, and progressing downwards and to the right its children are each more than the last: you have a one-way linear linked list. That worse case scenario would be a full traversal at O(n) time. Where n is the number of items in the tree.
+N, n being the number of nodes.
+depending on the way that the tree is ordered, it could be anywhere between log(n) and N steps.
+log(n)
+worst case scenario = the number of levels of the tree, ie: the node at the farthest position from the root node. best case = 1 step if its the root node.
+3 steps at most. There are 3 cases.
+log(n) where n equals the total number of nodes in the tree.
+the same number of steps as the number of levels or generations in the tree
+to find a node in a binary search tree takes at most the same number of steps as there are levels of the tree.
+three steps<br>visit the root node, then go to right subtree, after visiting right subtree visit left subtree
+log n
+( n(n-1) ) / 2<br><br>
+2n-1
+it takes at most h steps, where h is the height of the tree.
+it depends on the install search tree then from there for whatever the case is the it repeats it back along the case of the primary node

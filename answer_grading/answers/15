@@ -1,0 +1,31 @@
+Any functions that follows their deceleration that are in the source code file are allowed to have access the variables. Also global scope variables retrain their value throughout the execution of the program.
+they can be accessed by any C++ file anywhere.
+Global variables have file scope.
+The scope of global variables are created by placing variable declarations outside any class or function definition. Global variables retain their values throughout the execution of the program and they can be referenced by any function that follows their declarations or definitions in the source file.
+A global variable is an identifier that retains it's value throughout the execution of the program. It has file scope.
+Global Variables can be used in any function as long as the appropriate .h file that holds the variable is included
+They can be accessed by any part of the program. It can be referenced by any function that follows the declarations or definitions in the source file.
+can be accesed by any classes that have and object of that variables class in it
+Global variables have file-scope. The variable is know to all functions throught the file
+The entire program
+They have file scope when placed outside a function.
+File scope.
+They can be used throughout the program
+Global variable can b accessed by any class wit an object in the variables class
+The scope of global variables is at the file level.
+Global variables all have file scope.
+it is accessible by all functions within a program
+variables accessible anywhere in the program, as long as they are public.
+They can be referenced by any function following their declaration or definition inside the source file.
+globally, anywhere in the program.
+Global variables have a file scope
+The entire program.
+throughout the execution of the program
+If a variable is declared global, any function or class can use that variable.
+The entire program or file.
+throught the programm
+the whole code
+File scope
+can be referenced by any function that follows their declarations or definitions in the source file
+global variables have program scope (accessible anywhere in program)
+variables that exist throught the entire script. their values can be changed anytime in the code and fucntions.

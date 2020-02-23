@@ -1,0 +1,28 @@
+Try several sets of data on an algorithm that includes worst case, best case, and random cases. Also try and run the same program on a different computer with the same specs
+not answered
+time complexity using big O <br>logarthmic O(log n)<br>linear O(n)<br>exponential O(n^2)<br>quadratic O(n^k) k&gt;=1<br>Polynomial O(a^n) n&gt;1<br>
+Using some sort of counting principle of the number of operations performed in an algorithm.
+Experimental means you would actually write a prototype of the algorithm and measure the time it takes to run given certain parameters.
+measuring the relationship of running an algorithm with different input sizes.
+Oposite of a theoretical assessment of the algorithm to determine runtime, but to run the code first to determine the the runtime. This is not recommended because it is a limited test. It does not include all possibilities of the data, nor the hardware used to process the data.
+not answered
+The experimental approach for measuring the running time is by using the Big O equation which tells you the running time.
+You create and run the algorithm multiple times, while measuring the amount of time it takes, you then average the results.
+keep a value of how many operations it takes and add to this value each time a function is called.
+BIG-OH
+Running the program with various input data and measuring the running time with system time.
+You run a program with different data sizes, like 10^x. As you increase x and measure the completion speeds for the program, you can find patterns and attempt the measure the running time. It's very important to keep the same software and hardware however, which makes experimental testing inferior to theoretical in the eyes of most.
+to run the program through and see how many times each thing is called and the runtime of each function is based on that.
+the number of times a specific segments get called per unit work.
+For every call into memory, add/ multiply it into an equation of type O(n)
+adding a time marker at the before the algorithm is called and another time marker immediately after so that you have the change in time, then you can calculate the efficiency by the speed of the computers cpu.
+Big O(h) notation
+the experimental approach measures actual running time in t. t= seconds.
+running an algorithm on a specific set of data
+In experimental terms, the running time of an algorithm is measured by the number of operations required to complete the function. This number can usually be expressed in big-O notation.
+run the code for n-times and get average values, drop the constant and lowest number. for example if <br> f(x) = 3n +1<br>the running time will bef f(x) = O(n)
+to measure the actual time of the program to run. and calculate the running time using the input and operations done
+adding up the number of operations performed based on the worst case possible.
+the experimental approach would be to run through the algorithm and see how long it takes
+trying it with different sets of inputs, and measuring the amount of time that the algorithm actually takes.
+running the input with various inputs measuring the running time with system time

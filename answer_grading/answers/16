@@ -1,0 +1,31 @@
+It expands the function's definition in that place. Once the functions is called you can use it as many times as you need. The compiler just expands on the function.
+When the compiler inline-expands a function call, the function's code gets inserted into the caller's code stream (conceptually similar to what happens with a #define macro). This can, depending on a zillion other things, improve performance, because the optimizer can procedurally integrate the called code â€” optimize the called code into the caller. <br><br>
+The inline keyword advises the compiler to copy the function's code in place to avoid function calls; however the compiler can and typically does ignore the inline qualifier for all but the smallest functions.
+The compiler can ignore the inline qualifier and typically does so for all but the smallest functions.
+Placing the qualifier inline before a function's return type in the function definition "advises" the compiler to generate a copy of the function's code in place to avoid a function call.
+You declare your inline function in the header or before your int main(). You then can call that function at anytime in your main program quickly and easily.
+It expands a small function out... making your code longer, but also makes it run faster.
+the function is not treated as a separate unit like other functions
+When the program compiles,it will copy the function inplace, avoiding a function call.
+It replaces all instances of that function call with the inline code itself, resulting in longer but faster programs.
+The compiler can ignore the inline qualifier and typically does so for all but the smallest functions.
+Ignores the inline qualifier and typically does so for all but the smallest functions.
+If the function is small enough it will expand it but it will run faster as it will avoid making so many calls to the function.
+it treats them as the same function
+Inline functions are copied in place, instead of being referenced.
+For inline functions, the compiler creates a copy of the function's code in place so it doesn't have to make a function call and add to the function call stack.
+it generates a copy of the function's coding which eliminates calling the function
+not answered
+It generates a copy of the function's code by by inserting it in the program.
+tells the compiler to make a copy of function's code in place to avoid a function call. it typically ignores it, except for the smallest functions.
+The compiler can ignore the inline qualifier and typically does so for all but the smallest functions.
+Multiple copies of the function code are inserted into the program, making it bigger.
+compiler ignores inline qualifier
+It generates a copy of the function, if it is needed again.
+The complier includes copies of inline functions instead of making function calls, but usually only with very small functions.
+Compiler generate a copy of the function's code in place (when appropriate) to avoid a function call
+instead of calling the function every time it is invoked, the compiler will replace the function call with a copy of the function body
+Expands the function into the program
+it generates a copy of the functions code in place to avoid a function call
+the function call will be replaced by the code that was defined in the inline function
+When the compiler inline-expands a function call, the function's code gets inserted into the caller's code stream (conceptually similar to what happens with a #define macro). This can, depending on a zillion other things, improve performance, because the optimizer can procedurally integrate the called code â€” optimize the called code into the caller.

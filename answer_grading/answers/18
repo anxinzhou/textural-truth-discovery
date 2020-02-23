@@ -1,0 +1,31 @@
+The compiler selects the proper functions to execute based on number, types and order of arguments in the function call.
+They differentiated by the compiler by the conditions/inputs used for one of the overloaded functions.
+The compiler distinguishes overloaded functions by their signatures. It encodes each function identifier with the number and types of its parameters to generate type-safe linkage, which ensures the proper overloaded function is called.
+Overloaded functions are distinguished by their signatures, Name mangling or name decoration, and type-safe linkage ensures that proper overloaded functions is called and types of the arguments conform to tpes to the parameters.
+The compiler selects proper function to execute based on number, types and order of arguments in the function call.
+By the type they are initilized with (int, char, etc.)
+It selects the proper function to execute based on number, types and order of arguments in the function call.
+overloaded functions must have the same return type but different input parameters
+It examines the names, types, and order of arguments on each function.
+unique function signatures
+Is based on number, types, and order of arguments in the function call.
+Compiler selects proper function to execute based on number, types and order of arguments in the function call.
+not answered
+they have to have same return type, but different input parameters
+Overloaded functions are differentiated by their parameters.
+The compiler selects the right function to execute from the number, types and order of arguments in the function call.
+it creates a set of candidate functions then a set of viable functions
+their function signature.
+The number and type of its parameters.
+by their function signature
+They have the same name, just different parameters.
+They are differntiated by number, types and order of arguments in the function call.
+it looks at the number, types, and order of arguments in the function call<br>
+The compiler differentiates overloaded functions by their signature.
+By the number, types, and order of their arguments
+Compiler selects proper function to execute based on number, types and order of arguments in the function call.
+paremeters
+By the number, and the types and order of the parameters.
+by the number and type of arguments
+by their signature (return type, argument list)
+overloaded function simply invovles haing a method with the same name within the class. is used to implement a method for subclass which overrides in other words replaces the implementation of the super class. Overloading the concept of providing different meaning to a object based on the context of its presence. Overloading is one type of polymorphism and this is also a feature in programing.

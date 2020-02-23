@@ -1,0 +1,87 @@
+What is the role of a prototype program in problem solving?
+What stages in the software life cycle are influenced by the testing stage?
+What are the main advantages associated with object-oriented programming?
+Where do C++ programs begin to execute?
+What is a variable?
+Where are variables declared in a C++ program?
+What is the main difference between a while and a do...while statement?
+What is typically included in a class definition?
+What is the difference between a data member and a local variable inside a member function?
+What is the difference between a constructor and a function?
+When does C++ create a default constructor?
+How many constructors can be created for a class?
+What is the difference between a function prototype and a function definition?
+What is the role of a header-file?
+What does a function signature include?
+What is the scope of global variables?
+How does the compiler handle inline functions?
+What is the main advantage associated with function arguments that are passed by reference?
+How are overloaded functions differentiated by the compiler?
+When defining a recursive function, what are possible causes for infinite recursion?
+What are the similarities between iteration and recursion?
+What are the two different ways of specifying the length of an array?
+What is the main difference between strings declared using the type string versus strings declared using an array of characters?
+How are arrays passed to functions?
+What is the difference between an array declared as static, and one that is not?
+How many dimensions need to be specified when passing a multi-dimensional array as an argument to a function?
+Using an index outside the bounds of the array generates an error. Is this a compilation error or a run-time error?
+How are bi-dimensional arrays stored in memory, by rows or by columns?
+In one sentence, what is the main idea implemented by insertion sort?
+In one sentence, what is the main idea implemented by selection sort?
+What is the number of operations for insertion sort under a best-case scenario, and what is the best-case scenario?
+What is the base case for a recursive implementation of merge sort?
+What is a pointer?
+What does the address (&) operator return?
+What does the star (*) operator return?
+How can an array be addressed in pointer/offset notation?
+What does the sizeof operator return?
+What are the different ways to pass a pointer to a function?
+What is a function pointer?
+What is a linked list?
+What is the main advantage of linked lists over arrays?
+What is the main advantage of arrays over linked lists?
+How are linked lists passed as arguments to a function?
+What is the difference between a circular linked list and a basic linked list?
+What is the main advantage of a doubly-linked list over a basic linked list?
+What is the main disadvantage of a doubly-linked list over a basic linked list?
+What is a stack?
+What are the two main functions defined by a stack?
+How can you implement a stack with an array?
+How can you implement a stack with a list?
+Which implementation (array-based vs. list-based) is preferred, and why?
+How are infix expressions evaluated by computers?
+What operations would you need to perform to find a given element on a stack?
+What is a queue?
+What are the two main functions defined by a queue?
+How can you implement a queue with an array?
+How can you implement a queue with a list?
+Which implementation (array-based vs. list-based) is preferred for a queue, and why?
+What is the stack operation corresponding to the enqueue operation in queues?
+What data structure is more appropriate for scheduling printing jobs at a printer, a stack or a queue?
+What is a tree?
+What is the height of a tree?
+What is a leaf?
+What is a binary tree?
+What is a binary search tree?
+What is the inorder traversal of a binary tree?
+How many comparisons does it take to find an element in a binary search tree?
+What are the elements typically included in a class definition?
+What are the access-specifiers that can be used in a C++ class definition?
+How are objects initialized when they are created?
+What is a function signature?
+What is a recursive function?
+What is the alternative way to solve a problem that could be solved through recursive functions?
+What is the difference between an array that is declared as static and one that is not?
+What is the main difference between a string of characters that is read into a variable of type string versus a variable of type char[]?
+Briefly describe the divide-and-conquer paradigm.
+Briefly describe in one sentence how does merge sort work?
+What is a pointer?
+What is the experimental approach for measuring the running time of an algorithm?
+Order the following functions by their running time: n^2; log(log n) ; 2^(log n) ; n! ; n^3.
+Briefly, how does selection sort work?
+What is the advantage of linked lists over arrays?
+What is a queue?
+What are the main operations associated with a stack?
+What is the Euler tour traversal of a tree?
+How do you delete a node from a binary search tree?
+How many steps does it take to search a node in a binary search tree?

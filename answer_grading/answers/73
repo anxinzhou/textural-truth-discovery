@@ -1,0 +1,30 @@
+Iteration, performers a series of checks and loops.
+The alternative method is to use loops in the program instead of a function which calls itself.
+An alternative to solving a problem using recursive functions is to solve the problem using iteration.
+Iteration, this would be more efficient and has repetition structure.
+One can use iteration or by using a simple while/for loop.
+iteration
+Iteration. A while loop or a for loop will be able to accomplish the same desired outcome... It may be faster than recursion, but could also be harder to understand.
+you can also solve the problem iteratively
+iterative
+Using iteration loops.
+Another alternative way to solve a problem instead of using recursive functions is by using iteration.
+A recursive function can often be solved using an iterative function, which runs faster, but is often more complicated.
+iteration
+Any recursive function can be solved using an iterative method.
+Many recursive solutions may also be solved with looping control statements, such as while, for, do-while, etc.
+Using an iterative function, which repeats a specified operation or set of operations until a terminating point or base case is reached.
+iteratively
+using an Iterative calls
+Iteration.
+iteration is the alternative way to solve a problem
+using an iterative solution instead
+Using an iterative solution. For, while, or do while loop.
+the alternative way to solve a problem that could be solved using recursion is iteration.
+Any problem solved recursively could be solved with an iterative function.<br>Iterative replacements for recursive functions may be more difficult to program, but often lead to more efficient solutions to a problem.<br>
+by iteration
+itteration, like a for loop, a while loop, or a do while loop
+Iteration by using loops
+iterative functions
+iteration
+the alt, way is to use a functions parameter in a call "to" function.

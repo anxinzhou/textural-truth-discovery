@@ -1,0 +1,26 @@
+the number of bytes of an array during program compilation.
+The sizeof operator returns the size of the operand.
+Returns size of operand in bytes.
+It returns the size of an array in bytes.
+Returns the size of the array in bytes during the program compilation.
+it returns the size of the argument passed in
+The byte size of the date stored ina variable.
+sizeof returns the size of the operand in bytes
+The amount of memory required for a specific parameter such as ints, doubles.
+sizeof returns the size of the operand in bytes.
+the size of the information in bits.
+the size of the string.
+sizeof returns the size in bytes of the respective object.
+The sizeof operator returns the total number of bytes of its operand.
+The size of an operand in bytes. Used with variable names, type names, and constant values
+the size in bytes needed to store the object in memory
+the size of the list object.
+the sizeof operator returns the size in bytes of an array parameter
+the size of operand in bytes
+returns the size in bytes of the specified data
+It returns the size of an operand in memory, which is checked at compiler-time.
+Return size of operand in bytes
+the total number of bytes of an object.
+total number of bytes in the array
+it returns the size in bytes of a certain variable type
+it yields the size in bytes of the operand, which can be an expression or the parenthesized name of a type

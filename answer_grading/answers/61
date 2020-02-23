@@ -1,0 +1,24 @@
+Each level of a generation in the tree, some people do not count the root as a generation
+The height of a tree is in terms of the levels of its nodes such that, if the tree is empty its height is 0 otherwise its height is equal to the maximum level of its nodes.
+The height of a tree is the number of nodes on the longest path from the root to a leaf.
+The number of nodes on the longest path from the root of the tree to a leaf.
+Height = the number of times you must progress down the levels of a tree to reach a leaf of the greatest distance from the root.
+the height of a tree is the length from the root to the furthest leaf
+The height is the number of generations (levels) from the root.
+The height of a tree is the number of levels between the root and the leaf farthest away from it.
+is the depth of its furthest leaf
+the number of nodes from root to leaf
+the distance from the deepest leaf to the root
+the number of generations or levels of a tree
+The intensity of the children. Say you begin with one node, Thats one height. Then you add two children to that node and then two children to each of those nodes and two children to each of THOSE nodes. Youre current height would be 4.
+the number of levels of a tree, like a tree can have at minimum a depth of 3 and at most a height of 8 for 8 nodes.
+The number of nodes on the longest path from the root to the leaf.
+The height of a tree is the number of nodes on the longes path from the root to a leaf.
+is equal to the number of levels. levels between the root node and the terminal nodes.
+the number of generations or levels the tree has
+The height of a tree is the depth of its subtrees, that is, how many layers deep it is.
+is the number of generations in the tree
+The number of nodes on the longest path from the root to a leaf.
+the number of distinct levels of separation
+the height of a tree is how many levels of nodes that it has
+The connections between elements are called branches. Trees are often called inverted trees because they are normally drawn with the root at the top.

@@ -1,0 +1,30 @@
+usually it is by rows then followed by the column, but it is up to the programmer to determine how values are stored in bi-dimensional arrays.
+by rows.
+Multi-dimensional arrays are stored in memory by rows.
+A bi-dimensional/two-dimensional array is stored in a row-column matrix. Where the first index indicates the row and the second indicates the column. This means that when array elements are accessed in the order in which they are actually stored in memory, the right index changes faster than the left.
+They are stored in memory in rows.
+rows
+By rows.
+by rows
+m-by-n. by row-column.
+bi-dimensional arrays are stored by rows
+By rows.
+By column.
+columns
+By rows
+by-dimensional arrays are stored by row
+x by y is row by column.<br>So x is rows, and y is columns.<br>Since the length of the row is not needed when passing the array to the function, this leads me to believe that bi-dimensional arrays are stored by rows at a time.
+Both, they are stored in seperate sections.
+by rows, then columns.
+Rows
+by rows of rows
+by rows
+rows
+stored by rows
+by rows
+by rows
+by rows
+rows
+by row and column
+by rows
+No answer

@@ -1,0 +1,30 @@
+The name of the class file, the parameters it must take to perform its function. Also a brief description of what the class does.
+access specifiers and functions, oftentimes a constructor.
+The elements typically included in a class definition are the function prototypes, usually declared public, and the data members used in the class, which are usually declared private.
+Class is user defined. It contains members, data and functions. The keyword class is used and includes brackets ({})
+Member functions and data members.
+the functions and variables used when the object is defined for the class.
+Data members, functions and function definitions, variables.
+return type and input parameters
+Constructor<br>Data members<br>Methods
+Function members and member attributes, or in other words, the class variables and functions.
+The elements that are included in a class definition is the access-modifier, data types, variables, and function signatures.
+The variables and function prototypes.
+public and private variables and initiations of functions included in the class.
+The return value and the accepted value.
+A class definition typically includes the class name, the classes constructor(s), and any extra functions and class variables.
+Parameters and their type, Class name, and return type, and the code to be executed in the class.
+data members, class variables, and functions
+Constructor, functions, and variables native to the class.
+functions and data members
+data members and function definitions
+member functions and data members
+constructor, and function definitions.
+class name<br>data of class<br>definition of functions and methods
+A class definition includes the definitions of the class' constructor(s) and any public or private functions. Of course, it also #includes the class header and any necessary C libraries
+Class name, {}, semicoln at the end of the defination, private and bublic followed by ": "
+a constructor, private and public variables, and function prototypes
+Data variables and Functions, Data members
+class definitions include the name of the class and type of parameters
+class variables, class function prototypes
+input & return type elements

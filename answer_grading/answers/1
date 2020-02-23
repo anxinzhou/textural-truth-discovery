@@ -1,0 +1,29 @@
+Refining and possibly the design if the testing phase reveals problems in the design. Production can be affected if the program is unworkable in its current form which will lead to a later production time than originally estimated. Also affects coding because after testing you may need to rewrite the code for the program to remove errors.
+The implementation phase and the maintenance phase are effected
+Verification, coding, refining the solution and maintenance are all influenced by the testing stage.
+In RUP the stages in the software life cycle are influenced by the testing stage is:<br><br>Elaboration phase- refined progject vision, iterative devilopment of core system, development of system requirements, more accurate time and cost estimates.<br><br>Construction phase- iterative development of remaining system.<br><br>Transition phase-testing and deployment of the system.
+Refining the solution, Production and Maintenance are all influenced by the Testing stage.
+Elaboration, Construction, and Transition are all affected by testing
+Refining, Production, Maintenance
+Refining the solution
+-Verification<br> -Debugging
+Refining and Coding
+The second half of the Elaboration phase, Construction phase, and the Transition phase.<br>
+The refining step, the production step, and the maintenance stage.<br>
+Elaboration, Construction, Transition
+Refining.
+The testing stage has a direct influence on the final version of a program, being as it is the debugging and finalization of a software revision.
+Directly: Refining, coding. Because Refining is right before the Testing Phase and Coding is right after the Testing Phase.<br><br>Indirectly: Production, Maintenance. Because Refining occurs before these last two stages in the Software Life Cycle.
+Testing, refining, production, and maintenance.
+Depending on how the work is done, Testing is spread throughout the <br>process as to prevent errors from showing up later on due to lack of<br>foresight.<br>
+Elaboration, construction, and transition.
+All stages are influenced except setting the program requirements. If a test fails, it can change the whole design, implementation, etc of a program as well as the final outcome.
+Refining, production, and maintenance
+coding and refining
+refining, production, maintenance.
+Removing logical errors, testing for valid data, random data and actual data.
+1- specification<br>2- design<br>3- risk analysis<br>4- verification<br>5- coding<br>6- testing<br>7- refining<br>8- production<br>9- maintenance
+Refining stage, Production stage, and Maintenance stage.<br><br>
+Testing could affect all parts of the life cycle; it could make you go back <br><br>to specification if it does not test well.
+coding
+The Individual components and steps such as analysis, design, and implementing code as well as the entire system are tested for execution of the requirements identified during the analysis stage. i.e. Main output
