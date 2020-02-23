@@ -15,7 +15,7 @@ typedef vector<Keyword> Answer;
 typedef vector<int> AnswerLabel; // cluster label of a answer, sizeof keyword length
 typedef vector<int> TruthLabel; // indicator truth label for user, sizeof cluster
 typedef vector<int> FactorLabel; // for cluster factor  , size of k clusters
-typedef vector<int> Score;  // scores for user for a questions, sizeof user num
+typedef vector<float> Score;  // scores for user for a questions, sizeof user num
 
 typedef vector<float> Cluster;  // A cluster
 typedef vector<vector<Answer >> Dataset;
