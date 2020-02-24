@@ -165,7 +165,7 @@ void test_time() {
 
 int main() {
     // initialize
-    const int TEXT_TRUTH_TRY_ROUND = 1;
+    const int TEXT_TRUTH_TRY_ROUND = 1000;
     vector<string> questions;
     Dataset dataset;
     RawDataset raw_dataset;
@@ -205,7 +205,7 @@ int main() {
     cout << "raw dataset size: " << raw_dataset.size() << endl;
     cout << "dataset size: " << dataset.size() << endl;
     t1 = std::chrono::high_resolution_clock::now();
-    vector<Score> score = texttruth(dataset, TEXT_TRUTH_TRY_ROUND);
+    vector<Score> score = texttruth(dataset,  TEXT_TRUTH_TRY_ROUND);
     // func()
 
     t2 = std::chrono::high_resolution_clock::now();
@@ -241,6 +241,7 @@ int main() {
     }
     cout<<"sample count:" << sample_count <<endl;
     cout<<"average score: "<<total_score/sample_count<<endl;
+
     return 0;
 }
 

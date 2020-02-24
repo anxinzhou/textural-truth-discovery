@@ -22,7 +22,7 @@ vector<int>::iterator get_prior_pointer(PriorCount &prior_count, bool is_true, b
 
 // default prior count is zero
 vector<Score> texttruth(Dataset &dataset, int try_round) {
-    int cluster_num = 10;
+    int cluster_num = 15;
     int question_num = dataset.size();
     int user_num = dataset[0].size();
     vector<vector<TruthLabel >> all_truth_label(question_num);
@@ -60,22 +60,20 @@ vector<Score> texttruth(Dataset &dataset, int try_round) {
         }
     }
 
-
+    vector<PriorCount> next_user_prior_count(user_num, PriorCount(4));
     // // calculate factor truth label by MCMC with fix rounds
     for (int m = 0; m < try_round; m++) {
-        // clear prior count
-        for (int i = 0; i < user_num; ++i) {
-            // x,
-            PriorCount &prior_count = user_prior_count[i];
-            for (int j = 0; j < prior_count.size(); ++j) {
-                prior_count[j] = 0;
+        // set prior count
+        // clear first
+        for(int i=0;i<user_num;++i) {
+            for(int j=0; j<4;++j) {
+                next_user_prior_count[i][j] = 0;
             }
         }
 
-        // set prior count
         for (int i = 0; i < user_num; ++i) {
             // x,
-            PriorCount &prior_count = user_prior_count[i];
+            PriorCount &prior_count = next_user_prior_count[i];
             for (int j = 0; j < question_num; ++j) {
                 FactorLabel &factor_label = question_factor_label[j];
                 for (int k = 0; k < cluster_num; ++k) {
@@ -85,8 +83,24 @@ vector<Score> texttruth(Dataset &dataset, int try_round) {
                     *it = *it + 1;
                 }
             }
-
         }
+        // test if any change, early quit
+        bool equal = true;
+        for(int i=0;i<user_num;++i) {
+            for(int j=0; j<4;++j) {
+                if(user_prior_count[i][j]!=next_user_prior_count[i][j]) {
+                    equal = false;
+                    break;
+                }
+            }
+        }
+        if(equal) {
+            cout<<"no change to prior_count, quit at round " <<m<< endl;
+            break;
+        }
+
+        swap(user_prior_count, next_user_prior_count);
+
         // calculate new factor label
         for (int i = 0; i < question_num; i++) {
             FactorLabel &factor_label = question_factor_label[i];
@@ -99,18 +113,16 @@ vector<Score> texttruth(Dataset &dataset, int try_round) {
                     for (int k = 0; k < user_num; ++k) {
                         int y = all_truth_label[i][k][j];
                         PriorCount &prior_count = user_prior_count[k];
-                        p[x] = log(*get_prior_pointer(prior_count, x, y) /
-                                   (*get_prior_pointer(prior_count, x, 0) + *get_prior_pointer(prior_count, x, 1)));
+                        float prob = (*get_prior_pointer(prior_count, x, y) + 1.0) /
+                                     (*get_prior_pointer(prior_count, x, 0) + *get_prior_pointer(prior_count, x, 1) +
+                                      2.0);
+                        p[x] += log(prob);
                     }
                 }
-                if(factor_label[j] == 0) {
-                    if(p[1]/(p[0]+p[1]) > (float)rand() / RAND_MAX) {
-                        factor_label[j] = 1;
-                    }
+                if (p[0] > p[1]) {
+                    factor_label[j] = 0;
                 } else {
-                    if(p[0]/(p[0]+p[1]) > (float)rand() / RAND_MAX) {
-                        factor_label[j] = 0;
-                    }
+                    factor_label[j] = 1;
                 }
             }
         }
