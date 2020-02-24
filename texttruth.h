@@ -6,6 +6,7 @@
 #define ANONYMOUS_PAYMENT_TEXTTRUTH_H
 
 #include <vector>
+#include <unordered_map>
 
 using namespace std;
 
@@ -19,9 +20,17 @@ typedef vector<float> Score;  // scores for user for a questions, sizeof user nu
 
 typedef vector<float> Cluster;  // A cluster
 typedef vector<vector<Answer >> Dataset;
+typedef vector<vector<string> > RawDataset;
 typedef vector<int> PriorCount; // n(0,0), n(0,1), n(1,0), n(1,1)
 
-vector<AnswerLabel> sphere_kmeans(vector<Answer> &answers, int cluster_number, int max_iter = 300, float tol = 1e-4);
-vector<Score> texttruth(Dataset &dataset, int try_round = 1000);
+vector<AnswerLabel> sphere_kmeans(vector<Answer> &answers, int cluster_number, int max_iter = 20, float tol = 1e-6);
+
+vector<Score> texttruth(Dataset &dataset, int try_round = 1);
+
+void word_embedding(RawDataset &raw_dataset, Dataset &dataset, unordered_map<string, Keyword> &dic);
+
+void
+top_k_result(RawDataset &rawDataset, vector<Score> &all_score, vector<Score> &baseline_score, RawDataset &top_results,
+             vector<Score> &top_scores, int top_k = 3);
 
 #endif //ANONYMOUS_PAYMENT_TEXTTRUTH_H

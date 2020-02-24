@@ -18,7 +18,7 @@
 
 using namespace std;
 
-void load_answer_grading_data(vector<string> &questions, Dataset &dataset, vector<Score> &baseline_score) {
+void load_answer_grading_data(vector<string> &questions, RawDataset &raw_dataset, vector<Score> &baseline_score) {
     // load questions
     ifstream question_file("../answer_grading/questions/questions");
     if (!question_file.is_open()) {
@@ -61,7 +61,16 @@ void load_answer_grading_data(vector<string> &questions, Dataset &dataset, vecto
         }
     }
 
-    auto raw_dataset = vector<vector<string> >(question_num);
+    raw_dataset = RawDataset(question_num);
+    // get maximum size of score
+    int max_score_size = 0;
+    for(auto score: baseline_score) {
+        if (score.size()>max_score_size) {
+            max_score_size = score.size();
+        }
+    }
+    int user_num = max_score_size;
+
     // read answer
     for (boost::filesystem::directory_iterator itr("../answer_grading/answers"); itr != end_itr; ++itr) {
         // If it's not a directory, list it. If you want to list directories too, just remove this check.
@@ -76,16 +85,27 @@ void load_answer_grading_data(vector<string> &questions, Dataset &dataset, vecto
                 exit(0);
             }
             string answer;
+            int answer_count = 0;
             while (getline(answers_file, answer)) {
                 answers.push_back(answer);
+                answer_count += 1;
+            }
+            // fill not answered question
+            for (int i = answer_count; i < user_num; ++i) {
+                int choice = rand() % i;
+                answers.push_back(answers[choice]);
+                Score &score = baseline_score[atof(file_name.c_str())];
+                score.push_back(score[choice]);
             }
             raw_dataset[atof(file_name.c_str())] = answers;
         }
     }
+
+
 }
 
 void load_word_embedding(unordered_map<string, Keyword> &dic) {
-    ifstream word_embedding_file("../glove.6B/glove.6B.50d.txt");
+    ifstream word_embedding_file("../glove.twitter.27B/glove.twitter.27B.50d.txt");
     if (!word_embedding_file.is_open()) {
         cout << strerror(errno) << endl;
         exit(0);
@@ -144,17 +164,83 @@ void test_time() {
 }
 
 int main() {
+    // initialize
+    const int TEXT_TRUTH_TRY_ROUND = 1;
     vector<string> questions;
     Dataset dataset;
+    RawDataset raw_dataset;
     vector<Score> baseline_score;
     unordered_map<string, Keyword> dic;
-//    load_keyword_from_file(dic, "../dictionary");
-//    cout<<"dictionary size"<<dic.size()<<endl;
+    //------------------------------------------------------------------------
+    // load dictionary
 
-    load_answer_grading_data(questions, dataset, baseline_score);
-//    for (int i=0;i<questions.size();i++) {
-//        cout<<questions[i]<<endl;
+    cout << "load dictionary" << endl;
+    auto t1 = std::chrono::high_resolution_clock::now();
+    // func()
+//    load_word_embedding(dic);
+//    save_keyword_to_file(dic,"../dictionary");
+    load_keyword_from_file(dic, "../dictionary");
+    auto t2 = std::chrono::high_resolution_clock::now();
+
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+
+    std::cout << duration / 1000.0 / 1000 << "s" << endl;
+
+
+    //------------------------------------------------------------------------
+    cout << "dictionary size: " << dic.size() << endl;
+    load_answer_grading_data(questions, raw_dataset, baseline_score);
+
+    // word embedding ----------------------
+    cout << "word embedding" << endl;
+    t1 = std::chrono::high_resolution_clock::now();
+    word_embedding(raw_dataset, dataset, dic);
+    t2 = std::chrono::high_resolution_clock::now();
+
+    duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    cout << duration / 1000.0 / 1000 << "s" << endl;
+
+    //------------------------------------------------------------------------
+    cout << "begin texttruth" << endl;
+    cout << "raw dataset size: " << raw_dataset.size() << endl;
+    cout << "dataset size: " << dataset.size() << endl;
+    t1 = std::chrono::high_resolution_clock::now();
+    vector<Score> score = texttruth(dataset, TEXT_TRUTH_TRY_ROUND);
+    // func()
+
+    t2 = std::chrono::high_resolution_clock::now();
+
+    duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+    cout << duration / 1000.0 / 1000 << "s" << endl;
+
+
+//    for(int i=0;i< score.size();i++) {
+//        cout<<"question: "<<i<<endl;
+//        for(int j=0; j<score[i].size();j++) {
+//            cout<<score[i][j]<<endl;
+//        }
 //    }
+    // get top k results
+    RawDataset top_results;
+    vector<Score> top_scores;
+    const int top_k = 5;
+    top_k_result(raw_dataset, score, baseline_score, top_results, top_scores, top_k);
+    float total_score = 0;
+    int sample_count = 0;
+    for (int i = 0; i < top_results.size(); ++i) {
+//        cout << "question: " << i << endl;
+//        cout << "question:" << questions[i] << endl;
+//        cout << " top 3 results:" << endl;
+        for (int j = 0; j < top_results[i].size(); ++j) {
+//            cout<< "Number "<<j+1<<" result:"<<endl;
+//            cout << top_results[i][j] << endl;
+//            cout << "actual point: " << top_scores[i][j]<<endl;
+            total_score += top_scores[i][j];
+            sample_count+=1;
+        }
+    }
+    cout<<"sample count:" << sample_count <<endl;
+    cout<<"average score: "<<total_score/sample_count<<endl;
     return 0;
 }
 
