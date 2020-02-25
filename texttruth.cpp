@@ -3,21 +3,26 @@
 //
 
 #include "texttruth.h"
-#include <vector>
-#include <iostream>
-#include <sstream>
-#include <cmath>
-#include <unordered_set>
-#include <queue>
-#include <string>
+
 
 using namespace std;
+
+float similarity(vector<float> &a, vector<float> &b) {
+    int n = a.size();
+    float sim = 0;
+    for (int i = 0; i < n; ++i) {
+        sim += a[i] * b[i];
+    }
+
+    return sim;
+}
 
 vector<int>::iterator get_prior_pointer(PriorCount &prior_count, bool is_true, bool is_positive) {
     if (!is_true && !is_positive) return prior_count.begin();
     if (!is_true && is_positive) return prior_count.begin() + 1;
     if (is_true && !is_positive) return prior_count.begin() + 2;
     if (is_true && is_positive) return prior_count.begin() + 3;
+    throw "unexpected position";
 }
 
 // default prior count is zero
@@ -149,15 +154,6 @@ vector<Score> texttruth(Dataset &dataset, int try_round) {
     return user_score;
 }
 
-float similarity(vector<float> &a, vector<float> &b) {
-    int n = a.size();
-    float sim = 0;
-    for (int i = 0; i < n; ++i) {
-        sim += a[i] * b[i];
-    }
-    return sim;
-}
-
 vector<string> string_split(string &s) {
     vector<string> tokens;
     istringstream iss(s);
@@ -260,9 +256,7 @@ vector<AnswerLabel> sphere_kmeans(vector<Answer> &answers, int cluster_number, i
     for (int i = 0; i < max_iter; ++i) {
         // clear next cluster
         for (int j = 0; j < cluster_number; ++j) {
-            for (int k = 0; k < dimension; ++k) {
-                next_clusters[j][k] = 0;
-            }
+            memset(&next_clusters[j][0],0,dimension*sizeof(float));
         }
 
         // calculate new cluster
@@ -279,24 +273,16 @@ vector<AnswerLabel> sphere_kmeans(vector<Answer> &answers, int cluster_number, i
 
         // normalize each cluster
         for (int j = 0; j < cluster_number; j++) {
-            float total = 0;
-            for (int p = 0; p < dimension; ++p) {
-                total += next_clusters[j][p] * next_clusters[j][p];
-            }
+            float total = hpc::dot_product(next_clusters[j],next_clusters[j]);
             total = sqrt(total);
-            for (int p = 0; p < dimension; ++p) {
-                next_clusters[j][p] /= total;
-            }
+            hpc::vector_div(next_clusters[j],total);
         }
 
         // test stop condition
         bool stop = true;
         for (int j = 0; j < cluster_number; j++) {
-            float sim = 0;
-            for (int p = 0; p < dimension; ++p) {
-                if (similarity(clusters[j], next_clusters[j]) < (1 - tol)) {
-                    stop = false;
-                }
+            if (hpc::dot_product(clusters[j], next_clusters[j]) < (1 - tol)) {
+                stop = false;
             }
         }
 
@@ -318,7 +304,7 @@ vector<AnswerLabel> sphere_kmeans(vector<Answer> &answers, int cluster_number, i
                 int max_sim_index = -1;
                 Keyword &keyword = answers[j][k];
                 for (int p = 0; p < cluster_number; ++p) {
-                    float sim = similarity(keyword, clusters[p]);
+                    float sim = hpc::dot_product(keyword, clusters[p]);
                     if (sim > max_sim) {
                         max_sim = sim;
                         max_sim_index = p;

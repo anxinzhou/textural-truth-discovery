@@ -15,6 +15,7 @@
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include "boost/filesystem.hpp"
+#include "util.h"
 
 using namespace std;
 
@@ -191,6 +192,7 @@ int main() {
     cout << "dictionary size: " << dic.size() << endl;
     load_answer_grading_data(questions, raw_dataset, baseline_score);
 
+
     // word embedding ----------------------
     cout << "word embedding" << endl;
     t1 = std::chrono::high_resolution_clock::now();
@@ -199,6 +201,22 @@ int main() {
 
     duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
     cout << duration / 1000.0 / 1000 << "s" << endl;
+
+////     test 1
+//    float a =similarity(dataset[0][0][0],dataset[0][0][1]);
+//    float b = hpc::dot_product(dataset[0][0][0],dataset[0][0][1]);
+//    cout<<a<<" "<<b<<endl;
+//    return 0;
+    // test 2
+//    auto v = dataset[0][0][0];
+//    float total = 2.5432423;
+//    hpc::vector_div(v,total);
+//    for(int i=0;i<v.size();++i) {
+////        v[i] /=total;
+//        cout<<(v[i])<<" ";
+//    }
+//    return 0;
+
 
     //------------------------------------------------------------------------
     cout << "begin texttruth" << endl;

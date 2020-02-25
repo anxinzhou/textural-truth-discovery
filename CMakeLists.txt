@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 project(texttruth)
-set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11 -I /usr/local/include   -L /usr/local/lib -lboost_serialization -lboost_filesystem")
+set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11 -I /usr/local/include   -L /usr/local/lib -lboost_serialization -lboost_filesystem -march=sandybridge -march=haswell ")
 
-add_executable(${PROJECT_NAME}   main.cpp texttruth.cpp)
+add_executable(${PROJECT_NAME}   main.cpp texttruth.cpp util.cpp)
 

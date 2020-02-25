@@ -7,6 +7,14 @@
 
 #include <vector>
 #include <unordered_map>
+#include <iostream>
+#include <sstream>
+#include <cmath>
+#include <unordered_set>
+#include <queue>
+#include <string>
+#include <immintrin.h>
+#include "util.h"
 
 using namespace std;
 
@@ -32,5 +40,5 @@ void word_embedding(RawDataset &raw_dataset, Dataset &dataset, unordered_map<str
 void
 top_k_result(RawDataset &rawDataset, vector<Score> &all_score, vector<Score> &baseline_score, RawDataset &top_results,
              vector<Score> &top_scores, int top_k = 3);
-
+float similarity(vector<float> &a, vector<float> &b);
 #endif //ANONYMOUS_PAYMENT_TEXTTRUTH_H
