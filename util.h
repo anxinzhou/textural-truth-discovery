@@ -101,5 +101,26 @@ namespace hpc {
         return hsum_ps_sse3(vlow);         // and inline the sse3 version, which is optimal for AVX
         // (no wasted instructions, and all of them are the 4B minimum)
     }
+
+    inline bool vector_cmpeq(std::vector<int>&p, std::vector<int>&q) {
+        int *a  = &p[0];
+        int *b =  &q[0];
+        int i=0;
+        int length = p.size();
+        bool equal = true;
+        for(;i<length-8;i+=8) {
+            __m256i va = _mm256_load_si256((__m256i *)(a+i));
+            __m256i vb = _mm256_load_si256((__m256i *)(b+i));
+            __m256 compare_result = _mm256_cmpeq_epi32(va, vb);
+            int result = _mm256_movemask_epi8(compare_result);
+            equal &= (0xffffffff == result);
+            if(!equal) return false;
+        }
+        for(;i<length;i++) {
+            equal &= (p[i]==q[i]);
+            if(!equal) return false;
+        }
+        return true;
+    }
 }
 #endif //TEXTTRUTH_UTIL_H

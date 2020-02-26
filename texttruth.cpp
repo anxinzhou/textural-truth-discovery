@@ -66,7 +66,7 @@ vector<Score> texttruth(Dataset &dataset, int try_round) {
     }
 
     vector<PriorCount> next_user_prior_count(user_num, PriorCount(4));
-    // // calculate factor truth label by MCMC with fix rounds
+    // // calculate factor truth label by EM
     for (int m = 0; m < try_round; m++) {
         // set prior count
         // clear first
