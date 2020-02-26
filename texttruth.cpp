@@ -27,7 +27,7 @@ vector<int>::iterator get_prior_pointer(PriorCount &prior_count, bool is_true, b
 
 // default prior count is zero
 vector<Score> texttruth(Dataset &dataset, int try_round) {
-    int cluster_num = 15;
+    int cluster_num = 8;
     int question_num = dataset.size();
     int user_num = dataset[0].size();
     vector<vector<TruthLabel >> all_truth_label(question_num);
@@ -41,7 +41,7 @@ vector<Score> texttruth(Dataset &dataset, int try_round) {
     // calculate user truth labels
     for (int i = 0; i < question_num; i++) {
         vector<Answer> &answers = dataset[i];
-        vector<AnswerLabel> user_answer_label = sphere_kmeans(answers, cluster_num);
+        vector<AnswerLabel> user_answer_label = sphere_kmeans(answers, cluster_num, "kmeans++");
         vector<TruthLabel> user_truth_label(user_num);
         for (int j = 0; j < user_num; ++j) {
             AnswerLabel &answer_label = user_answer_label[j];
@@ -70,8 +70,8 @@ vector<Score> texttruth(Dataset &dataset, int try_round) {
     for (int m = 0; m < try_round; m++) {
         // set prior count
         // clear first
-        for(int i=0;i<user_num;++i) {
-            for(int j=0; j<4;++j) {
+        for (int i = 0; i < user_num; ++i) {
+            for (int j = 0; j < 4; ++j) {
                 next_user_prior_count[i][j] = 0;
             }
         }
@@ -91,16 +91,16 @@ vector<Score> texttruth(Dataset &dataset, int try_round) {
         }
         // test if any change, early quit
         bool equal = true;
-        for(int i=0;i<user_num;++i) {
-            for(int j=0; j<4;++j) {
-                if(user_prior_count[i][j]!=next_user_prior_count[i][j]) {
+        for (int i = 0; i < user_num; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                if (user_prior_count[i][j] != next_user_prior_count[i][j]) {
                     equal = false;
                     break;
                 }
             }
         }
-        if(equal) {
-            cout<<"no change to prior_count, quit at round " <<m<< endl;
+        if (equal) {
+            cout << "no change to prior_count, quit at round " << m << endl;
             break;
         }
 
@@ -235,67 +235,102 @@ top_k_result(RawDataset &rawDataset, vector<Score> &all_score, vector<Score> &ba
     }
 }
 
-vector<AnswerLabel> sphere_kmeans(vector<Answer> &answers, int cluster_number, int max_iter, float tol) {
+void kmeans_init(vector<Answer> &answers, int cluster_number, vector<Keyword> &clusters, string strategy) {
+    // initialize by kmeans++
     int user_num = answers.size();
     int dimension = answers[0][0].size();
-    vector<AnswerLabel> user_answer_label;
+    if (strategy == "kmeans++") {
+        // random chooose first point
+        int user;
+        int size = 0;
+        do {
+            user = rand() % user_num;
+            size = answers[user].size();
+        } while (size == 0);
+        int index = rand() % size;
+        memcpy(&clusters[0][0], &answers[user][index][0], sizeof(float) * dimension);
 
-    // randomly assign cluster label;
-    for (int i = 0; i < user_num; i++) {
-        int answer_size = answers[i].size();
-        AnswerLabel answer_label(answer_size);
-        for (int j = 0; j < answer_size; ++j) {
-            answer_label[j] = rand() % cluster_number;
+        // init cache
+        vector<vector<float>> min_distance_cache(user_num);
+        vector<vector<int>> min_distance_index_cache(user_num);
+
+        for(int i=0;i<user_num;i++){
+            int answer_size = answers[i].size();
+            min_distance_cache[i]= vector<float>(answer_size);
+            min_distance_index_cache[i] = vector<int>(answer_size);
         }
-        user_answer_label.push_back(answer_label);
-    }
 
-    vector<Cluster> clusters(cluster_number, Cluster(dimension));
-    vector<Cluster> next_clusters(cluster_number, Cluster(dimension));
+        const int MIN_SIM = 10;
+        const int MAX_SIM = -10;
+        for (int i = 0; i < cluster_number-1; i++) {
+            int global_max_user_index = -1;
+            float global_max_distance = MAX_SIM;
+            int global_max_keywrod_index = -1;
+            for (int j = 0; j < user_num; ++j) {
+                int answer_size = answers[j].size();
+                auto &user_distance_min_cache = min_distance_cache[j];
+                auto & user_min_distance_index_cache = min_distance_index_cache[j];
+                for (int k = 0; k < answer_size; ++k) {
+                    float min_sim = MIN_SIM;
+                    int min_keyword_index = -1;
+                    if (i != 0) {
+                        min_sim = user_distance_min_cache[k];
+                        min_keyword_index = user_min_distance_index_cache[k];
+                    }
 
-    for (int i = 0; i < max_iter; ++i) {
-        // clear next cluster
-        for (int j = 0; j < cluster_number; ++j) {
-            memset(&next_clusters[j][0],0,dimension*sizeof(float));
-        }
+                    Keyword &keyword = answers[j][k];
+                    float sim = 1 - hpc::dot_product(keyword, clusters[i]);
+                    if (min_sim > sim) {
+                        min_sim = sim;
+                        min_keyword_index = k;
+                    }
+                    if (min_sim > global_max_distance) {
+                        global_max_distance = min_sim;
+                        global_max_user_index = j;
+                        global_max_keywrod_index = min_keyword_index;
+                    }
 
-        // calculate new cluster
-        for (int j = 0; j < user_num; j++) {
-            int answer_size = answers[j].size();
-            for (int k = 0; k < answer_size; k++) {
-                Keyword &keyword = answers[j][k];
-                int label = user_answer_label[j][k];
-                for (int p = 0; p < dimension; p++) {
-                    next_clusters[label][p] += keyword[p];
+                    user_distance_min_cache[k] = min_sim;
+                    user_min_distance_index_cache[k] = min_keyword_index;
                 }
             }
+//            cout<< global_max_distance <<" "<<global_max_user_index << " "<<global_max_keywrod_index<<endl;
+            memcpy(&clusters[i+1][0], &answers[global_max_user_index][global_max_keywrod_index][0],
+                   sizeof(float) * dimension);
         }
 
-        // normalize each cluster
-        for (int j = 0; j < cluster_number; j++) {
-            float total = hpc::dot_product(next_clusters[j],next_clusters[j]);
-            total = sqrt(total);
-            hpc::vector_div(next_clusters[j],total);
-        }
+    } else {
+        // use random
+        for (int i = 0; i < cluster_number; i++) {
 
-        // test stop condition
-        bool stop = true;
-        for (int j = 0; j < cluster_number; j++) {
-            if (hpc::dot_product(clusters[j], next_clusters[j]) < (1 - tol)) {
-                stop = false;
-            }
+            int user;
+            int size = 0;
+            do {
+                user = rand() % user_num;
+                size = answers[user].size();
+            } while (size == 0);
+            int index = rand() % size;
+            memcpy(&clusters[i][0], &answers[user][index][0], sizeof(float) * dimension);
         }
+    }
+}
 
-        if (stop) {
-            if (i < 2) {
-                cout << "early stop, stop at iteration " << i << endl;
-                break;
-            }
-        }
+vector<AnswerLabel>
+sphere_kmeans(vector<Answer> &answers, int cluster_number, const string &strategy, int max_iter, float tol) {
+    int user_num = answers.size();
+    int dimension = answers[0][0].size();
+    vector<AnswerLabel> user_answer_label(user_num);
+    vector<Cluster> clusters(cluster_number, Cluster(dimension));
+    vector<Cluster> next_clusters(cluster_number, Cluster(dimension));
+    for (int i = 0; i < user_num; ++i) {
+        user_answer_label[i] = AnswerLabel(answers[i].size());
+    }
 
-        // change cluster pointer
-        swap(clusters, next_clusters);
-        // assign new cluster //TODO
+    kmeans_init(answers, cluster_number, clusters, strategy);
+
+
+    for (int i = 0; i < max_iter; ++i) {
+        // assign new cluster label
 
         for (int j = 0; j < user_num; ++j) {
             int answer_size = answers[j].size();
@@ -313,6 +348,61 @@ vector<AnswerLabel> sphere_kmeans(vector<Answer> &answers, int cluster_number, i
                 user_answer_label[j][k] = max_sim_index;
             }
         }
+
+        // clear next cluster
+        for (int j = 0; j < cluster_number; ++j) {
+            memset(&next_clusters[j][0], 0, dimension * sizeof(float));
+        }
+
+        // calculate new cluster
+        for (int j = 0; j < user_num; j++) {
+            int answer_size = answers[j].size();
+            for (int k = 0; k < answer_size; k++) {
+                Keyword &keyword = answers[j][k];
+                int label = user_answer_label[j][k];
+                hpc::vector_add_inplace(next_clusters[label], keyword);
+            }
+        }
+
+        // normalize each cluster
+        for (int j = 0; j < cluster_number; j++) {
+            float total = hpc::dot_product(next_clusters[j], next_clusters[j]);
+            if (total == 0) {
+                // no item belongs to this cluter, use last one
+                memcpy(&next_clusters[j][0], &clusters[j][0], sizeof(float) * dimension);
+                total = hpc::dot_product(next_clusters[j], next_clusters[j]);
+            }
+            total = sqrt(total);
+            hpc::vector_mul_inplace(next_clusters[j], 1.0 / total);
+        }
+
+        // test stop condition
+        bool stop = true;
+        for (int j = 0; j < cluster_number; j++) {
+            if (hpc::dot_product(clusters[j], next_clusters[j]) < (1 - tol)) {
+                stop = false;
+                break;
+            }
+//            float result = (hpc::dot_product(clusters[j], next_clusters[j]));
+//            if (isnan(result)) {
+//                for (int k = 0; k < dimension; k++) {
+//                    cout << clusters[j][k] << " " << next_clusters[j][k] << endl;
+//                }
+//                exit(0);
+//            }
+        }
+
+        if (stop) {
+            cout << "early stop, stop at iteration " << i << endl;
+            break;
+//            if (i < 2) {
+//                cout << "early stop, stop at iteration " << i << endl;
+//                break;
+//            }
+        }
+
+        // change cluster pointer
+        swap(clusters, next_clusters);
     }
 
     return user_answer_label;

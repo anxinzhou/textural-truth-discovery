@@ -122,6 +122,10 @@ void load_word_embedding(unordered_map<string, Keyword> &dic) {
         while (iss >> v) {
             keyword.push_back(v);
         }
+        // normalize the keyword
+        float total = hpc::dot_product(keyword, keyword);
+        total = sqrt(total);
+        hpc::vector_mul_inplace(keyword,1/total);
         dic[key] = keyword;
 //        cout<<key<<endl;
 //        for(int i=0; i<keyword.size();i++){
@@ -164,6 +168,10 @@ void test_time() {
     std::cout << duration / 1000.0 / 1000 << "s" << endl;
 }
 
+void test_hpc(){
+
+}
+
 int main() {
     // initialize
     const int TEXT_TRUTH_TRY_ROUND = 1000;
@@ -201,23 +209,38 @@ int main() {
 
     duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
     cout << duration / 1000.0 / 1000 << "s" << endl;
-
+//
 ////     test 1
-//    float a =similarity(dataset[0][0][0],dataset[0][0][1]);
-//    float b = hpc::dot_product(dataset[0][0][0],dataset[0][0][1]);
-//    cout<<a<<" "<<b<<endl;
-//    return 0;
-    // test 2
-//    auto v = dataset[0][0][0];
-//    float total = 2.5432423;
-//    hpc::vector_div(v,total);
-//    for(int i=0;i<v.size();++i) {
-////        v[i] /=total;
-//        cout<<(v[i])<<" ";
-//    }
-//    return 0;
-
-
+////    float a =similarity(dataset[0][0][0],dataset[0][0][1]);
+////    float b = hpc::dot_product(dataset[0][0][0],dataset[0][0][1]);
+////    cout<<a<<" "<<b<<endl;
+////    return 0;
+////     test 2
+////    auto v = dataset[0][0][0];
+////    float total = 2.5432423;
+////    hpc::vector_mul(v,1/total);
+////    for(int i=0;i<v.size();++i) {
+//////        v[i] /=total;
+////        cout<<(v[i])<<" ";
+////    }
+////    return 0;
+//    // test 3
+////    vector<float>  a = dataset[0][0][0];
+////    vector<float>  b = dataset[0][0][1];
+////    vector<float>  c = dataset[0][0][0];
+////    vector<float>  d = dataset[0][0][1];
+////    for(int i=0;i<c.size();++i) {
+////        c[i] += d[i];
+////        cout<< c[i] << " ";
+////    }
+////    cout<<endl;
+////    hpc::vector_add_inplace(a,b);
+////    for(int i=0;i<c.size();++i) {
+////        cout<< a[i] << " ";
+////    }
+////    return 0;
+//
+//
     //------------------------------------------------------------------------
     cout << "begin texttruth" << endl;
     cout << "raw dataset size: " << raw_dataset.size() << endl;

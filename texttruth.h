@@ -31,7 +31,7 @@ typedef vector<vector<Answer >> Dataset;
 typedef vector<vector<string> > RawDataset;
 typedef vector<int> PriorCount; // n(0,0), n(0,1), n(1,0), n(1,1)
 
-vector<AnswerLabel> sphere_kmeans(vector<Answer> &answers, int cluster_number, int max_iter = 20, float tol = 1e-6);
+vector<AnswerLabel> sphere_kmeans(vector<Answer> &answers, int cluster_number, const string & strategy="kmeans++",int max_iter = 40, float tol = 1e-8);
 
 vector<Score> texttruth(Dataset &dataset, int try_round = 1);
 

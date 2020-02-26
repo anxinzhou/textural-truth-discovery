@@ -58,18 +58,40 @@ namespace hpc {
         }
         return aux;
     }
-    inline void vector_div(std::vector<float> &p, float v) {
+    inline void vector_mul_inplace(std::vector<float> &p, float v) {
         int length = p.size();
         int i=0;
         float * a= &p[0];
-        __m128 div_v =  _mm_load_ps1(&v);
+        __m128 mul_v =  _mm_load_ps1(&v);
         for(;i<length-4;i+=4) {
             __m128 va = _mm_loadu_ps(a+i);
-            __m128 result = _mm_div_ps(va,div_v);
+            __m128 result = _mm_mul_ps(va,mul_v);
             _mm_store_ps(a+i,result);
         }
         for(;i<length;++i) {
-            p[i] /= v;
+            p[i] *= v;
+        }
+    }
+    // add p+q and store result in p
+    inline void vector_add_inplace(std::vector<float> &p, std::vector<float>&q) {
+        float *a = &p[0];
+        float *b = &q[0];
+        int i=0;
+        int length = p.size();
+        for(;i<length-8;i+=8) {
+            __m256 va = _mm256_loadu_ps(a+i);
+            __m256 vb = _mm256_loadu_ps(b+i);
+            __m256 result = _mm256_add_ps(va,vb);
+            _mm256_store_ps(a+i, result);
+        }
+        for(;i<length-4;i+=4) {
+            __m128 va = _mm_loadu_ps(a+i);
+            __m128 vb = _mm_loadu_ps(b+i);
+            __m128 result = _mm_add_ps(va,vb);
+            _mm_store_ps(a+i, result);
+        }
+        for(;i<length;++i) {
+           p[i] += q[i];
         }
     }
     inline float hsum256_ps_avx(__m256 v) {
