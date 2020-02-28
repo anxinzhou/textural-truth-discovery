@@ -10,6 +10,7 @@ set(CMAKE_BUILD_TYPE  Release)
 include(GNUInstallDirs)
 add_library(ttruth SHARED  texttruth.cpp util.cpp)
 set(MY_HEADER texttruth.h util.h)
+target_include_directories(ttruth PUBLIC ${PROJECT_SOURCE_DIR})
 set_target_properties(ttruth PROPERTIES PUBLIC_HEADER "${MY_HEADER}")
 install(TARGETS ttruth
         LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/lib
