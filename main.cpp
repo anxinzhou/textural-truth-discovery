@@ -106,7 +106,7 @@ void load_answer_grading_data(vector<string> &questions, RawDataset &raw_dataset
 }
 
 void load_word_embedding(unordered_map<string, Keyword> &dic) {
-    ifstream word_embedding_file("../glove.twitter.27B/glove.twitter.27B.50d.txt");
+    ifstream word_embedding_file("../glove.twitter.27B/glove.twitter.27B.200d.txt");
     if (!word_embedding_file.is_open()) {
         cout << strerror(errno) << endl;
         exit(0);
