@@ -23,16 +23,16 @@ namespace hpc {
         float *a = &p[0];
         float *b = &q[0];
         int i=0;
-//        for (; i < length-8; i += 8)
-////        {
-////            __m256 va = _mm256_loadu_ps(a + i);
-////            __m256 vb = _mm256_loadu_ps(b + i);
-////            __m256 dp = _mm256_dp_ps(va, vb, 0xf1);
-////            __m128 m128_low = _mm256_castps256_ps128(dp);
-////            __m128 m128_high = _mm256_extractf128_ps(dp, 1);
-////            __m128 m128_sum = _mm_add_ps(m128_low, m128_high);
-////            aux+= _mm_cvtss_f32(m128_sum);
-////        }
+        for (; i < length-8; i += 8)
+        {
+            __m256 va = _mm256_load_ps(a + i);
+            __m256 vb = _mm256_load_ps(b + i);
+            __m256 dp = _mm256_dp_ps(va, vb, 0xf1);
+            __m128 m128_low = _mm256_castps256_ps128(dp);
+            __m128 m128_high = _mm256_extractf128_ps(dp, 1);
+            __m128 m128_sum = _mm_add_ps(m128_low, m128_high);
+            aux+= _mm_cvtss_f32(m128_sum);
+        }
         for(;i<length-4;i+=4) {
             __m128 va = _mm_loadu_ps(a+i);
             __m128 vb = _mm_loadu_ps(b+i);
