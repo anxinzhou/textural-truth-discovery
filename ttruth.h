@@ -7,19 +7,22 @@
 
 
 #include "Member.h"
+#include <random>
+#include "util.h"
+#include <iostream>
+#include <queue>
 
-void ttruth(vector<Question> &questions, vector<User> &users);
+void ttruth(vector<Question> &questions, vector<User> &users,const unordered_set<string> &words_filter ,WordModel &word_model, int top_k=5);
 
 void obervation_update(vector<User> &users, vector<Keyword> &keywords);
 
-
 // define two  clustering method
-void hard_movMF(vector<Keyword> &keywords);
+void hard_movMF(vector<Keyword> &keywords, int cluster_num, int max_iter=100, double tol = 1e-12);
 
-void bayesian_movMF(vector<Keyword> &keywords);
+void latent_truth_model(vector<Question> &questions, vector<User> &users, int max_iter=20);
 
-void latent_truth_model(vector<Question>&questions, vector<User>&users,int max_iter);
-
+// helper function
+vector<WordVec> kmeans_init(vector<Keyword> &keywords, int cluster_num, int dimension);
 
 
 #endif //TEXTTRUTH_TTRUTH_H
