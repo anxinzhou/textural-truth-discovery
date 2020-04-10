@@ -27,6 +27,7 @@ public:
     vector<vector<Answer>> answers;
     vector<vector<float>> scores;
     vector<int> question_per_exam;
+    static const int key_factor_number;
     AnswerGradingData() {
         question_per_exam = vector<int> {
             7, 7, 7, 7,  4, 7, 7, 7, 7, 7, 10, 10

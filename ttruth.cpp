@@ -17,9 +17,30 @@ void ttruth(vector<Question> &questions, vector<User> &users, const unordered_se
             keywords.insert(keywords.end(), user_keywords.begin(), user_keywords.end());
         }
         // vmf clustering
-        hard_movMF(keywords, questions[question_id].key_factor_number);
+        sphere_kmeans(keywords, questions[question_id].key_factor_number);
+
         // update observation
         obervation_update(users, keywords);
+
+//        if (question_id == 11) {
+//            // see how many words each cluster have
+//            vector<int> cluster_histogram(questions[question_id].key_factor_number, 0);
+//            for (int k = 0; k < keywords.size(); k++) {
+//                cluster_histogram[keywords[k].cluster_assignment] += 1;
+//            }
+//            for (int k = 0; k < cluster_histogram.size(); k++) {
+//                if(cluster_histogram[k] ==0) continue;
+//                cout << "cluster "<<k<<" "<<cluster_histogram[k] << endl;
+//                for(auto &keyword : keywords) {
+//                    if(keyword.cluster_assignment == k) {
+//                        cout<< keyword.content<<" ";
+//                    }
+//                }
+//                cout<<endl;
+//            }
+//            cout << endl;
+//        }
+//        cout<<keywords.size()<<endl;
         question_keywords.push_back(std::move(keywords));
     }
 
@@ -86,16 +107,84 @@ inline float distance_metrics(const WordVec &a, const WordVec &b) {
     return 2 - 2 * hpc::dot_product(a, b);
 }
 
+void sphere_kmeans(vector<Keyword> &keywords, int cluster_num, int max_iter, double tol) {
+    int dimension = 0;
+    if (keywords.size() != 0) dimension = keywords[0].get_dimension();
+    // init with kmeans ++
+    vector<WordVec> clusters = kmeans_init(keywords, cluster_num);
+
+
+
+    for (int t = 0; t < max_iter; t++) {
+        // e step
+        // assign new cluster
+        for (auto &keyword: keywords) {
+            float max_prob = INT_MIN;
+            int max_index = -1;
+            for (int i = 0; i < clusters.size(); i++) {
+                float prob = hpc::dot_product(clusters[i], keyword.vec());
+                if (prob > max_prob) {
+                    max_prob = prob;
+                    max_index = i;
+                }
+            }
+            keyword.cluster_assignment = max_index;
+        }
+        // M step
+        // update parameters
+        vector<WordVec> new_clusters(cluster_num, WordVec(dimension, 0));
+        for (auto &keyword: keywords) {
+            int cluster_assignment = keyword.cluster_assignment;
+            hpc::vector_add_inplace(new_clusters[cluster_assignment], keyword.vec());
+        }
+
+        //normalize mu
+        for (int i = 0; i < cluster_num; i++) {
+            auto &mu = new_clusters[i];
+            float mu_l2 = sqrt(hpc::dot_product(mu, mu));
+            if (mu_l2 < 1e-8) continue; //
+            hpc::vector_mul_inplace(mu, 1.0 / mu_l2);
+        }
+        // check stop tol
+        double cur_tol = 0;
+        for (int i = 0; i < cluster_num; i++) {
+            WordVec diff = hpc::vector_sub(new_clusters[i], clusters[i]);
+            double square_norm = sqrt(hpc::dot_product(diff, diff));
+            cur_tol += square_norm;
+        }
+
+        if (cur_tol < tol) {
+//            cout << "sphere clustering converge at iteration " << t << endl;
+            break;
+        }
+
+        //set new cluster
+        for (int i = 0; i < cluster_num; i++) {
+            clusters[i] = std::move(new_clusters[i]);
+        }
+    }
+
+    // see how many words each cluster have
+//    vector<int> cluster_histogram(cluster_num,0);
+//    for(int k=0;k<keywords.size();k++) {
+//        cluster_histogram[keywords[k].cluster_assignment]+=1;
+//    }
+//    for(int k=0;k<cluster_histogram.size();k++) {
+//        cout<< cluster_histogram[k] << " ";
+//    }
+//    cout<<endl;
+}
+
 void hard_movMF(vector<Keyword> &keywords, int cluster_num, int max_iter, double tol) {
     int dimension = 0;
     if (keywords.size() != 0) dimension = keywords[0].get_dimension();
     // init with kmeans ++
-    vector<WordVec> mus = kmeans_init(keywords, cluster_num, dimension);
+    vector<WordVec> mus = kmeans_init(keywords, cluster_num);
     vector<VMF> movMF;
 
 
     for (int i = 0; i < cluster_num; i++) {
-        movMF.emplace_back(std::move(mus[i]), 1.0 / cluster_num, 1, dimension);
+        movMF.emplace_back(std::move(mus[i]), 1.0 / keywords.size(), 1, dimension);
     }
 
     for (int t = 0; t < max_iter; t++) {
@@ -116,7 +205,7 @@ void hard_movMF(vector<Keyword> &keywords, int cluster_num, int max_iter, double
         }
         // M step
         // update parameters
-        vector<float> new_alpha(cluster_num, 0);
+        vector<float> new_alpha(cluster_num, 1e-6);
         vector<WordVec> new_mus(cluster_num, WordVec(dimension, 0));
         for (auto &keyword: keywords) {
             int cluster_assignment = keyword.cluster_assignment;
@@ -133,7 +222,7 @@ void hard_movMF(vector<Keyword> &keywords, int cluster_num, int max_iter, double
         for (int i = 0; i < cluster_num; i++) {
             auto alpha = new_alpha[i];
             auto &mu = new_mus[i];
-            if (alpha == 0) continue;
+            if (alpha < 1e-6) continue;
             double mu_l2 = sqrt(hpc::dot_product(mu, mu));
             double r = mu_l2 / (keywords.size() * alpha);
             float k; // set a large k if r == 1
@@ -147,7 +236,7 @@ void hard_movMF(vector<Keyword> &keywords, int cluster_num, int max_iter, double
         for (int i = 0; i < cluster_num; i++) {
             auto &mu = new_mus[i];
             float mu_l2 = sqrt(hpc::dot_product(mu, mu));
-            if (mu_l2 == 0) continue; // empty cluster
+            if (mu_l2 < 1e-8) continue; //
             hpc::vector_mul_inplace(mu, 1.0 / mu_l2);
         }
         // check stop tol
@@ -170,6 +259,16 @@ void hard_movMF(vector<Keyword> &keywords, int cluster_num, int max_iter, double
         }
     }
 
+    // see how many words each cluster have
+//    vector<int> cluster_histogram(cluster_num,0);
+//    for(int k=0;k<keywords.size();k++) {
+//        cluster_histogram[keywords[k].cluster_assignment]+=1;
+//    }
+//    for(int k=0;k<keywords.size();k++) {
+//        cout<< cluster_histogram[k] << " ";
+//    }
+//    cout<<endl;
+
 }
 
 void obervation_update(vector<User> &users, vector<Keyword> &keywords) {
@@ -182,54 +281,23 @@ void obervation_update(vector<User> &users, vector<Keyword> &keywords) {
 }
 
 void latent_truth_model(vector<Question> &questions, vector<User> &users, int max_iter) {
-    //random initialize truth indicator of each question
-    for (auto &question: questions) {
+    //random initialize truth indicator of each question and user prior count
+    for (int i = 0; i < questions.size(); i++) {
+        auto &question = questions[i];
         vector<int> &truth_indicator = question.truth_indicator;
-        for_each(truth_indicator.begin(), truth_indicator.end(), [](int &indicator) {
-            indicator = rand() % 2;
-        });
+        for (int j = 0; j < truth_indicator.size(); j++) {
+            int indicator = rand() % 2;
+            truth_indicator[j] = indicator;
+            for (auto &user:users) {
+                if (user.observations.count(i) == 0) continue;
+                user.update_prior_count(indicator, user.observations.at(i)[j], 1);
+            }
+        }
     }
     // gibbs sampling to infer truth
     for (int t = 0; t < max_iter; t++) {
         // clear prior count
 //        vector<PriorCount> old_prior_counts;
-
-        for (auto &user : users) {
-//            old_prior_counts.push_back(user.priorCount);
-            user.clear_prior_count();
-        }
-
-        // set new prior count
-        for (int i = 0; i < questions.size(); i++) {
-            auto &question = questions[i];
-            int question_id = i;
-            auto &truth_indicator = question.truth_indicator;
-            for (int j = 0; j < question.key_factor_number; j++) {
-                int indicator = truth_indicator[j];
-                for (auto &user: users) {
-                    if (user.observations.count(question_id) == 0)
-                        continue; //user doest not offer observation for this question
-                    int observation = user.observations.at(question_id)[j];
-                    user.update_prior_count(indicator, observation);
-                }
-            }
-        }
-
-        // check if has update, so can early stop
-//        bool equal = true;
-//        int total_diff =0;
-//        for (int i = 0; i < users.size(); ++i) {
-//            auto &old_prior = old_prior_counts[i];
-//            auto &new_prior = users[i].priorCount;
-//            for (int j = 0; j < 4; j++) {
-//                total_diff += abs(old_prior[j] - new_prior[j]);
-//            }
-//        }
-//        if (equal) {
-//            cout<<"latent truth discovery converge at iteration "<<t<<endl;
-//            break;
-//        };
-
 
         // update truth indicator
         for (int i = 0; i < questions.size(); i++) {
@@ -267,41 +335,64 @@ void latent_truth_model(vector<Question> &questions, vector<User> &users, int ma
                 p[0] = exp(p[0]);
                 p[1] = exp(p[1]);
                 double threshold = (double) (rand()) / RAND_MAX;
-                if (threshold < p[0] / (p[0] + p[1])) {
-                    truth_indicator[j] = 0;
-                } else {
-                    truth_indicator[j] = 1;
+                int new_indicator = threshold < p[0] / (p[0] + p[1]) ? 0 : 1;
+                if (old_indicator != new_indicator) {
+                    truth_indicator[j] = new_indicator;
+                    for (auto &user:users) {
+                        if (user.observations.count(i) == 0) continue;
+                        user.update_prior_count(new_indicator, user.observations.at(i)[j], 1);
+                        user.update_prior_count(old_indicator, user.observations.at(i)[j], -1);
+                    }
                 }
             }
         }
     }
 }
 
-vector<WordVec> kmeans_init(vector<Keyword> &keywords, int cluster_num, int dimension) {
+vector<WordVec> kmeans_init(vector<Keyword> &keywords, int cluster_num) {
     auto rnd1 = std::mt19937(std::random_device{}());
 
     vector<WordVec> clusters;
     int first_index = rnd1() % keywords.size();
     clusters.push_back(keywords[first_index].vec());
 
-    vector<float> distance_cache(keywords.size(), INT_MAX);
-
-
+    vector<float>cluster_distance(keywords.size());
     for (int i = 1; i < cluster_num; i++) {
         float max_dis = INT_MIN;
         int max_index = -1;
+        float total_dis = 0;
         for (int j = 0; j < keywords.size(); j++) {
             auto &keyword = keywords[j];
-            float cache_min = distance_cache[j];
-            float cur_dis = distance_metrics(keyword.vec(), clusters[clusters.size() - 1]);
-            cache_min = min(cache_min, cur_dis);
-            distance_cache[j] = cache_min;
-            if (cache_min > max_dis) {
-                max_dis = cache_min;
-                max_index = j;
+            float min_dis = INT_MAX;
+            for(auto &cluster: clusters) {
+                float dis = distance_metrics(keyword.vec(), clusters[clusters.size() - 1]);
+                if(dis < min_dis) min_dis = dis;
+            }
+            cluster_distance[j] = min_dis;
+            total_dis+= min_dis;
+        }
+        // normalize distance
+        for(auto &cd: cluster_distance) {
+            cd /= total_dis;
+        }
+        // sample from distribution
+        for(int j = 1; j<cluster_distance.size();j++) {
+            cluster_distance[j] += cluster_distance[j-1];
+        }
+        cluster_distance[cluster_distance.size()-1] = 1;
+        double prob = (double)rand()/RAND_MAX;
+        int cluster_index = -1;
+        if(prob<cluster_distance[0]) cluster_index = 0;
+        else {
+            for(int j = 1; j<cluster_distance.size();j++) {
+                if(prob>= cluster_distance[j-1] && prob < cluster_distance[j]) {
+                    cluster_index = j;
+                    break;
+                }
             }
         }
-        clusters.push_back(keywords[max_index].vec());
+//        cout<< cluster_index<<endl;
+        clusters.push_back(keywords[cluster_index].vec());
     }
     return clusters;
 }

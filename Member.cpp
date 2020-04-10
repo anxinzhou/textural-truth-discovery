@@ -4,8 +4,8 @@
 
 #include "Member.h"
 
-//false negative, false positive, true negative, true positive
-const int User::ALPHA[4] = {10, 10, 90, 90};
+//true negative, false positive, false negative, true positive
+const int User::ALPHA[4] = {90, 10, 50, 50};
 
 const int Question::BETA[2] = {10, 10};
 

@@ -4,6 +4,8 @@
 
 #include "dataset.h"
 
+const int AnswerGradingData::key_factor_number = 50;
+
 unordered_set<string> AnswerGradingData::words_filter = {"with", "who", "s", "above", "of", "are", "nor", "both",
                                                          "have", "i",
                                                          "yourself", "after", "those", "is", "their", "we", "same",
@@ -49,8 +51,6 @@ void AnswerGradingData::load_question(const string &question_file_path) {
     }
 
     string line;
-    // fix cluster number to 20
-    int key_factor_number = 15;
     while (getline(question_file, line)) {
         questions.emplace_back(std::move(line),key_factor_number);
     }

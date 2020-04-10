@@ -90,7 +90,7 @@ public:
     }
 
     const WordVec &get_vec(string &word) {
-        return model[word];
+        return model.at(word);
     }
 
     void load_raw_file(const string &path);
@@ -195,8 +195,8 @@ public:
     };
 
 //    User(PriorCount & priorCount, Observation &observation):priorCount(priorCount),observation(observation){};
-    void update_prior_count(int key_factor_indicator, int observation) {
-        priorCount[key_factor_indicator * 2 + observation] += 1;
+    void update_prior_count(int key_factor_indicator, int observation, int num) {
+        priorCount[key_factor_indicator * 2 + observation] += num;
     }
 
     void clear_prior_count() {

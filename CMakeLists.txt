@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.13)
 project(texttruth)
-set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11 -I /usr/local/include  -O3   -L /usr/local/lib -lboost_system -lboost_serialization -lboost_filesystem -march=native ")
+set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11 -I /usr/local/include -O3 -L /usr/local/lib -lboost_system -lboost_serialization -lboost_filesystem -march=skylake -mtune=skylake ")
 
-add_executable(${PROJECT_NAME}   test_ttruth.cpp ttruth.cpp Member.cpp dataset.cpp util.cpp)
+add_executable(${PROJECT_NAME}   test_ttruth.cpp ttruth.cpp Member.cpp dataset.cpp util.cpp oblivious_primitive.cpp)
 
 
 # make install
