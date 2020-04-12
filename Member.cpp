@@ -37,7 +37,26 @@ Answer::to_keywords(const unordered_set<string> &words_filter, WordModel &word_m
 //                    cout << token << endl;
             continue;
         }
-        keywords.emplace_back(owner_id, question_id, std::move(token), &word_model);
+        keywords.emplace_back(owner_id, question_id, std::move(token));
+    }
+    return keywords;
+}
+
+vector<Keyword>
+Answer::to_keywords(WordModel &word_model) {
+    // replace punc
+    vector<Keyword> keywords;
+    replace_if(raw_answer.begin(), raw_answer.end(),
+               [](const char &c) { return std::ispunct(c); }, ' ');
+
+    // lower alphabetic
+    transform(raw_answer.begin(), raw_answer.end(), raw_answer.begin(),
+              [](unsigned char c) { return std::tolower(c); });
+
+    auto tokens = string_split(raw_answer);
+    keywords.reserve(tokens.size());
+    for (auto token: tokens) {
+        keywords.emplace_back(owner_id, question_id, std::move(token));
     }
     return keywords;
 }

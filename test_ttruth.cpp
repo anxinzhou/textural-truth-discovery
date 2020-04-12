@@ -5,7 +5,12 @@
 #include "dataset.h"
 #include "Member.h"
 #include "ttruth.h"
+#include "oblivious_ttruth.h"
 #include "oblivious_primitive.h"
+#include <boost/serialization/string.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/serialization/unordered_set.hpp>
 
 using namespace std;
 
@@ -19,18 +24,25 @@ void test_time() {
     std::cout << duration / 1000.0 / 1000 << "s" << endl;
 }
 
-void test_non_oblivious_texttruth() {
+void test_texttruth(bool oblivious = true) {
     // load dataset answer grading
     const string dataset_path = "../answer_grading";
-    const string model_path = "../word_model/glove6B200d";
+    const string model_path = "../word_model/glove27B200d";
     AnswerGradingData answer_grade_data;
     answer_grade_data.load_dataset(dataset_path);
     WordModel word_model;
+
+//    word_model.load_raw_file("../glove.6B/glove.twitter.27B.200d.txt");
+//    word_model.save_model(model_path);
+//    return;
+
     auto s_w = std::chrono::high_resolution_clock::now();
     word_model.load_model(model_path);
     auto e_w = std::chrono::high_resolution_clock::now();
     auto dw = std::chrono::duration_cast<std::chrono::microseconds>(e_w - s_w).count();
     std::cout << "load model time " << dw / 1000.0 / 1000 << "s" << endl;
+
+
     // set user
     auto &questions_answers = answer_grade_data.answers;
     auto &questions = answer_grade_data.questions;
@@ -63,7 +75,13 @@ void test_non_oblivious_texttruth() {
     for (int top_k = 1; top_k <= 10; top_k += 1) {
         cout << "top " << top_k << endl;
         auto t1 = std::chrono::high_resolution_clock::now();
-        ttruth(questions, users, AnswerGradingData::words_filter, word_model, top_k);
+        if(!oblivious) {
+            cout<<"non oblivious version of textual truth"<<endl;
+            ttruth(questions, users, AnswerGradingData::words_filter, word_model, top_k);
+        } else {
+            cout<<"oblivious version of textual truth"<<endl;
+            oblivious_ttruth(questions, users, AnswerGradingData::words_filter, word_model, top_k);
+        }
         auto t2 = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
         std::cout << duration / 1000.0 / 1000 << "s" << endl;
@@ -115,7 +133,7 @@ void test_oblivious_assignment_AVX() {
 
 // benchmark the two
 void test() {
-    int size = 8 * 1024*1024;
+    int size = 8 * 1024 * 1024;
     vector<int> t(size);
     vector<int> f(size);
     vector<int> dst(size);
@@ -139,11 +157,39 @@ void test() {
 //    }
 }
 
+void test_bitonic_sort() {
+    vector<int> arr(1024);
+    for (int i = 0; i < arr.size(); i++) {
+        arr[i] = rand() % 1000;
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    bitonic_sort(arr, 1);
+    for (int i = 0; i < arr.size(); i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+void test_bitonic_sort_template() {
+    vector<string> arr(1024);
+    for (int i = 0; i < arr.size(); i++) {
+        arr[i] = to_string(rand() % 1000);
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    bitonic_sort(arr, 1);
+    for (int i = 0; i < arr.size(); i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+
 int main() {
-//    test_oblivious_assignment_AVX();
-//    test_oblivious_assignment();
-//    test();
-    test_non_oblivious_texttruth();
+    test_texttruth(true);
 }
 
 

@@ -106,29 +106,18 @@ public:
     int cluster_assignment;
     int owner_id;
     string content;
-    WordModel *word_model;
+    int shuffle_tag;
 
-    explicit Keyword(int owner_id, int question_id, const string &content,
-                     WordModel *word_model) :
+    explicit Keyword(int owner_id, int question_id, const string &content) :
             owner_id(owner_id),
             question_id(question_id),
-            content(content),
-            word_model(word_model) {};
+            content(content) {};
 
-    explicit Keyword(int owner_id, int question_id, string &&content,
-                     WordModel *word_model) :
+    explicit Keyword(int owner_id, int question_id, string &&content):
             owner_id(owner_id),
             question_id(question_id),
-            content(content),
-            word_model(word_model) {};
+            content(content) {};
 
-    const WordVec &vec() {
-        return word_model->get_vec(content);
-    }
-
-    int get_dimension() {
-        return word_model->dimension;
-    }
 };
 
 class Answer {
@@ -146,6 +135,9 @@ public:
 
     vector<Keyword>
     to_keywords(const unordered_set<string> &words_filter, WordModel &word_model);
+
+    vector<Keyword>
+    to_keywords(WordModel &word_model);
 
     static vector<string> string_split(const string &s);
 

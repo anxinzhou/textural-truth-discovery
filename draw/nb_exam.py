@@ -1,25 +1,26 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-exam_score = np.array(
-    [4.28571, 4.28571, 4.40476, 4.32143, 4.31429, 4.22619, 4.20408, 4.16964, 4.07937, 4.05, 4, 3.89286, 4.09524,
-     3.94643, 4.01429, 4.10714, 4.13265, 4.16071, 4.19841, 4.18571, 4.21429, 4.28571, 4.40476, 4.53571, 4.64286,
-     4.69048, 4.56122, 4.63393, 4.54762, 4.52857, 4.5, 4.46429, 4.42857, 4.375, 4.45714, 4.42857, 4.39796, 4.36607,
-     4.45238, 4.35714, 4.5, 4.3125, 4.16667, 4.15625, 4.075, 4.10417, 4.16071, 4.23438, 4.29167, 4.35, 4.78571, 4.60714,
-     4.61905, 4.625, 4.51429, 4.5, 4.44898, 4.49107, 4.50794, 4.52857, 3.92857, 4.32143, 4.28571, 4.30357, 4.35714,
-     4.38095, 4.42857, 4.41071, 4.34127, 4.33571, 4.57143, 4.39286, 4.35714, 4.5, 4.47143, 4.53571, 4.52041, 4.50893,
-     4.49206, 4.48571, 4.42857, 4.53571, 4.59524, 4.58929, 4.58571, 4.54762, 4.54082, 4.5625, 4.51587, 4.52143, 4.71429,
-     4.5, 4.54762, 4.32143, 4.41429, 4.38095, 4.39796, 4.40179, 4.36508, 4.42857, 4.5, 4.3, 4.36667, 4.4625, 4.35,
-     4.31667, 4.23571, 4.21875, 4.21111, 4.205, 4.75, 4.425, 4.53333, 4.6, 4.6, 4.47917, 4.46786, 4.47344, 4.47639,
-     4.53875, ])
-exam_score = exam_score.reshape(12, -1)
-print(exam_score)
-for i, score in enumerate(exam_score):
+oblivious_file_name = 'oblivious.txt'
+non_oblivious_file_name = 'non-oblivious.txt'
+
+def read_file(filename):
+    with open(filename,'r') as f:
+        lines = f.readlines()
+        lines = [eval(line.strip()) for line in lines]
+    return np.array(lines).reshape(-1,10)
+
+non_oblivious_exam_score = read_file(non_oblivious_file_name)
+oblivious_exam_score = read_file(oblivious_file_name)
+
+for i, (non_oblivious_score, oblivious_score) in enumerate(zip(non_oblivious_exam_score, oblivious_exam_score)):
     exam_id = i + 1
-    # plt.clf()
+    plt.clf()
     plt.ylim(3.5, 5)
-    plt.plot(range(1, 11), score, marker='o')
+    plt.plot(range(1, 11), non_oblivious_score, marker='o', label='non oblivious')
+    plt.plot(range(1, 11), oblivious_score, marker='x', label='oblivious')
     plt.xlabel("Top-K")
     plt.ylabel("Average Score")
+    plt.legend()
     fname = "Exam " + str(exam_id)
     plt.savefig(fname)

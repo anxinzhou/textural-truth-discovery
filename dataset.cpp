@@ -4,7 +4,7 @@
 
 #include "dataset.h"
 
-const int AnswerGradingData::key_factor_number = 50;
+const int AnswerGradingData::key_factor_number = 30;
 
 unordered_set<string> AnswerGradingData::words_filter = {"with", "who", "s", "above", "of", "are", "nor", "both",
                                                          "have", "i",
