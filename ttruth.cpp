@@ -307,7 +307,6 @@ void latent_truth_model(vector<Question> &questions, vector<User> &users, int ma
     for (int t = 0; t < max_iter; t++) {
         // clear prior count
 //        vector<PriorCount> old_prior_counts;
-
         // update truth indicator
         for (int i = 0; i < questions.size(); i++) {
             auto &question = questions[i];

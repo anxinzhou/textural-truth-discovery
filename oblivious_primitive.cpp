@@ -56,6 +56,7 @@ inline void oblivious_assign_score_pair(uint8_t pred, pair<double, int> &dst, pa
 void oblivious_compare_and_swap(pair<double, int> &a, pair<double, int> &b, int sort_direction,
                                 function<bool(pair<double, int> &a, pair<double, int> &b)> &cmp) {
     // 0 ? a>b: a<b
+
     bool flag = sort_direction == 0 == !cmp(a, b);
     pair<double, int> tmp(a);
     oblivious_assign_score_pair(flag, a, b, a);
@@ -139,10 +140,21 @@ void oblivious_assign_keyword(uint8_t pred, Keyword &dst, Keyword &t, Keyword &f
 
 void oblivious_compare_and_swap(Keyword &a, Keyword &b, int sort_direction, function<bool(Keyword &, Keyword &)> &cmp) {
     // 0 ? a>b: a<b
-    bool flag = sort_direction == 0 == !cmp(a, b);
-    Keyword tmp(a);
-    oblivious_assign_keyword(flag, a, b, a);
-    oblivious_assign_keyword(flag, b, tmp, b);
+    // not need to oblivious swap padding words for bitonic sort, assume the padded elements are always biggest, or smallest
+    if(a.question_id == -1 && b.question_id == -1) return;
+    if(a.question_id == -1) {
+        std::swap(a, b);
+    } else if(b.question_id == -1) {
+        return ;
+    } else {
+        bool flag = sort_direction == 0 == !cmp(a, b);
+        Keyword tmp(a);
+        oblivious_assign_keyword(flag, a, b, a);
+        oblivious_assign_keyword(flag, b, tmp, b);
+    }
+//    if(a.question_id == -1 && b.question_id == -1) return;
+
+
 }
 
 void __oblivious_bitonic_sort(vector<Keyword> &arr, int start_index, int end_index, int sort_direction,
@@ -183,7 +195,7 @@ void oblivious_bitonic_sort(vector<Keyword> &arr, int sort_direction, function<b
 
     //remove dummy
     for (auto &keyword: arr) {
-        if (keyword.question_id == -1) continue;
+        if (keyword.question_id == -1) break;
         tmp_arr.push_back(std::move(keyword));
     }
     arr = std::move(tmp_arr);
@@ -301,37 +313,52 @@ int sample_gamma(float p, int alpha) {
     return gamma;
 }
 
-void oblivious_dummy_words_addition(vector<Keyword> &padded_vocabulary, vector<Keyword> &keywords) {
+double oblivious_dummy_words_addition(vector<Keyword> &padded_vocabulary, vector<Keyword> &keywords, float epsilon, float delta) {
     const int DUMMY_TAG = -1;
     const int DUMMY_DUMMY_TAG = 1;
 
-    const float epsilon = 3;
-    const float delta = -32; // 2^(-32);
+//    const float epsilon = 3;
+//    const float delta = -32; // 2^(-32);
     float p = 1 - exp(-epsilon);
     double tmp = (delta - log2(0.5 - p / 4) - log2(padded_vocabulary.size())) / log2(1 - p);
     int alpha = tmp;
     if (tmp - alpha > 1e-8) alpha += 1;
 
-    vector<Keyword> dummy_words;
+    int true_words_size = keywords.size();
+    double overhead = 0;
+    for(int i=0; i<keywords.size();i++) {
+        keywords[i].shuffle_tag = DUMMY_TAG;
+    }
+
     for (int i = 0; i < padded_vocabulary.size(); ++i) {
         int gamma = sample_gamma(p, alpha);
         // generate 2*alpha dummy keywords
+        overhead+=gamma;
         Keyword dummy(padded_vocabulary[i]);
         for (int j = 0; j < 2 * alpha; j++) {
             dummy.owner_id = -1;
             dummy.shuffle_tag = oblivious_assign_CMOV(j < gamma, DUMMY_TAG, DUMMY_DUMMY_TAG);
-            dummy_words.push_back(dummy);
+            keywords.push_back(dummy);
         }
     }
     // oblivious sort
     function<bool(Keyword &, Keyword &)> kw_shuffle_cmp(keyword_shuffle_compare);
-    oblivious_bitonic_sort(dummy_words, 0, kw_shuffle_cmp);
+    oblivious_bitonic_sort(keywords, 0, kw_shuffle_cmp);
 
-    for (int i = 0; i < dummy_words.size(); i++) {
-        if (dummy_words[i].shuffle_tag != DUMMY_TAG) break;
-        keywords.push_back(std::move(dummy_words[i]));
+
+    int real_count = 0;
+    vector<Keyword> tmp_arr;
+    for (int i = 0; i < keywords.size(); i++) {
+        if (keywords[i].shuffle_tag != DUMMY_TAG) break;
+        tmp_arr.push_back(std::move(keywords[i]));
+//        keywords.push_back(std::move(dummy_words[i]));
     }
-
+//    cout<<"alpha "<<alpha<<endl;
+//    cout<<"vocabulary size "<<padded_vocabulary.size()<<endl;
+//    cout<<"overhad "<<overhead<<endl;
+//    cout<<"true words size "<<true_words_size<<endl;
+    keywords = std::move(tmp_arr);
+    return overhead/true_words_size;
     // obliviou shuffle
-    oblivious_shuffle(keywords);
+//    oblivious_shuffle(keywords);
 }

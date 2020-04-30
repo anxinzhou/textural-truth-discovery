@@ -13,6 +13,42 @@ void oblivious_ttruth(vector<Question> &questions, vector<User> &users, const un
 
     // prepare keywords
     vector<vector<Keyword>> question_keywords;
+
+    // test dp overhead
+    vector<float> epsilons;
+    vector<float> deltas  = {-20,-24,-28,-32,-36,-40};
+    for(int i=0; i<=15; i+=1) {
+        epsilons.push_back(0.3+0.2*i);
+    }
+    for(auto delta:deltas) {
+        for(auto epsilon: epsilons) {
+            double total_overhead = 0;
+            double total_words = 0;
+            for (int question_id = 0; question_id < questions.size(); question_id++) {
+                vector<Keyword> keywords;
+                // process keywords first
+                for (auto &user: users) {
+                    if (user.answers.count(question_id) == 0) continue;
+                    auto &answer = user.answers.at(question_id);
+                    auto user_keywords = answer.to_keywords(word_model);
+                    keywords.insert(keywords.end(), user_keywords.begin(), user_keywords.end());
+                }
+                // pad keywords to same length
+                keywords_padding(keywords);
+
+                // keywords space decide
+                auto padded_vocabulary = oblivious_vocabulary_decide(keywords);
+                // oblivious dummy words addition
+                total_words += keywords.size();
+                double overhead = oblivious_dummy_words_addition(padded_vocabulary, keywords, epsilon, delta);
+                total_overhead += overhead;
+            }
+//    cout<< "total words"<< total_words<<endl;
+            cout << "delta:"<<delta<<" epsilon:"<<epsilon <<" overhead " << total_overhead/questions.size() << endl;
+        }
+    }
+
+
     for (int question_id = 0; question_id < questions.size(); question_id++) {
         vector<Keyword> keywords;
         // process keywords first
@@ -28,7 +64,8 @@ void oblivious_ttruth(vector<Question> &questions, vector<User> &users, const un
         // keywords space decide
         auto padded_vocabulary = oblivious_vocabulary_decide(keywords);
         // oblivious dummy words addition
-        oblivious_dummy_words_addition(padded_vocabulary, keywords);
+        double overhead = oblivious_dummy_words_addition(padded_vocabulary, keywords);
+
         // remove padding
         keywords_remove_padding(keywords);
         // filter keywords;
@@ -63,7 +100,6 @@ void oblivious_ttruth(vector<Question> &questions, vector<User> &users, const un
 
         question_keywords.push_back(std::move(keywords));
     }
-
     //latent truth discovery
     oblivious_latent_truth_model(questions, users);
 
@@ -96,7 +132,7 @@ void oblivious_ttruth(vector<Question> &questions, vector<User> &users, const un
     // calculate truth score of user
     for (auto &user:users) {
         auto &answers = user.answers;
-        for (auto & it : answers) {
+        for (auto &it : answers) {
             auto &answer = it.second;
             user.truth_score += answer.truth_score;
         }

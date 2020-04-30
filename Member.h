@@ -107,7 +107,7 @@ public:
     int owner_id;
     string content;
     int shuffle_tag;
-
+//    Keyword()=default;
     explicit Keyword(int owner_id, int question_id, const string &content) :
             owner_id(owner_id),
             question_id(question_id),

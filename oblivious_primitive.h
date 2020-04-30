@@ -64,6 +64,7 @@ string oblivious_assign_string(uint8_t pred, const string &a, const string&b);
 void oblivious_assign_keyword(uint8_t pred, Keyword &dst, Keyword &t, Keyword &f);
 
 void oblivious_sort(vector<Keyword> &arr, int sort_direction);
+// 0 ascending , 1 descending
 void oblivious_sort(vector<pair<double, int>> &arr, int sort_direction);
 void oblivious_shuffle(vector<Keyword> &arr);
 
@@ -72,5 +73,5 @@ void keywords_remove_padding(vector<Keyword>& keywords);
 
 vector<Keyword> oblivious_vocabulary_decide(vector<Keyword>&keywords);
 
-void oblivious_dummy_words_addition(vector<Keyword> &padded_vocabulary, vector<Keyword> &keywords);
+double oblivious_dummy_words_addition(vector<Keyword> &padded_vocabulary, vector<Keyword> &keywords, float epsilon = 3, float delta = -32);
 #endif //TEXTTRUTH_OBLIVIOUS_PRIMITIVE_H

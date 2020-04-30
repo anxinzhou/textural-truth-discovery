@@ -1,0 +1,3 @@
+/home/ubuntu/textual_truth/cmake-build-remote/CMakeFiles/edit_cache.dir
+/home/ubuntu/textual_truth/cmake-build-remote/CMakeFiles/rebuild_cache.dir
+/home/ubuntu/textual_truth/cmake-build-remote/CMakeFiles/texttruth.dir

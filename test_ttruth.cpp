@@ -72,7 +72,7 @@ void test_texttruth(bool oblivious = true) {
     }
 
     // benchmark texttruth
-    for (int top_k = 1; top_k <= 10; top_k += 1) {
+    for (int top_k = 1; top_k <= 1; top_k += 1) {
         cout << "top " << top_k << endl;
         auto t1 = std::chrono::high_resolution_clock::now();
         if(!oblivious) {
@@ -188,8 +188,62 @@ void test_bitonic_sort_template() {
 }
 
 
+int sample_gamma2(float p, int alpha) {
+    const float base_prob = 0.5 * (1 - p / 2) * pow(1 - p, alpha);
+    float pr = (double) rand() / RAND_MAX;
+    while (pr < base_prob || pr > 1 - base_prob) {
+        pr = rand() / RAND_MAX;
+    }
+    int k = 0;
+    // k<0
+
+    double upper_bound = 0.5 * (1 - 0.5 * p);
+    double tmp = -(log(0.5 * (1 - 0.5 * p)) / log(1 - p) + 1);
+    int tmp_k = tmp;
+
+    k = oblivious_assign_CMOV(pr <= upper_bound, tmp_k, k);
+    // k = 0
+    upper_bound = 0.5 * (1 + 0.5 * p);
+    double bottom_bound = 0.5 * (1 - 0.5 * p);
+    k = oblivious_assign_CMOV(pr <= upper_bound && pr > bottom_bound, 0, k);
+    // k > 0
+    tmp = log((1 - pr) / (0.5 * (1 - 0.5 * p))) / log(1 - p);
+    tmp_k = tmp;
+    if (tmp - tmp_k > 1e-8) tmp_k += 1;
+    bottom_bound = 0.5 * (1 + 0.5 * p);
+    k = oblivious_assign_CMOV(pr > bottom_bound, tmp_k, k);
+    int gamma = k + alpha;
+    if (gamma < 0 || gamma > 2 * alpha) {
+        cout << "gamma out of range" << endl;
+        exit(-1);
+    }
+    return gamma;
+}
+
+void test_dp_overhead(int dic_size, float epsilon, float delta) {
+
+    float p = 1 - exp(-epsilon);
+    double tmp = (delta - log2(0.5 - p / 4) - log2(dic_size)) / log2(1 - p);
+    int alpha = tmp;
+    if (tmp - alpha > 1e-8) alpha += 1;
+
+    int total_overhead = 0;
+    for (int i = 0; i < dic_size; ++i) {
+        int gamma = sample_gamma2(p, alpha);
+        // generate 2*alpha dummy keyword
+        total_overhead+=gamma;
+    }
+    cout<<"ratio of dummy words to vocabulary of a task"<<(double)total_overhead/dic_size <<endl;
+}
+
+
+
 int main() {
+//    test_bitonic_sort();
     test_texttruth(true);
+//    float epsilon = 3;
+//    float delta = -32;
+//    test_dp_overhead(10000, epsilon, delta);
 }
 
 
